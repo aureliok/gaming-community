@@ -46,7 +46,7 @@ CREATE TABLE community_data.comments (
 
 CREATE TABLE community_data.votes (
 	vote_id SERIAL PRIMARY KEY
-	,vote_type VARCHAR(5) NOT NULL CHECK (vote_type IN ('upvote', 'downvote'))
+	,vote_type VARCHAR(8) NOT NULL CHECK (vote_type IN ('upvote', 'downvote'))
 	,user_id INT REFERENCES community_data.users(user_id)
 	,thread_id INT REFERENCES community_data.threads(thread_id)
 	,comment_id INT REFERENCES community_data.comments(comment_id)
@@ -55,7 +55,7 @@ CREATE TABLE community_data.votes (
 CREATE TABLE community_data.user_profiles (
 	user_id SERIAL PRIMARY KEY REFERENCES community_data.users(user_id)
 	,bio TEXT
-	,avatar_id VARCHAR(24) DEFAULT NULL
+	,avatar_id VARCHAR(32) DEFAULT NULL
 	,gaming_platform_link VARCHAR(50)
 );
 
@@ -66,22 +66,22 @@ CREATE TABLE community_data.genres (
 
 CREATE TABLE community_data.platforms (
 	platform_id SERIAL PRIMARY KEY
-	,platform VARCHAR(20) UNIQUE NOT NULL
+	,platform VARCHAR(30) UNIQUE NOT NULL
 );
 
 CREATE TABLE community_data.developers (
 	developer_id SERIAL PRIMARY KEY
-	,developer VARCHAR(20) UNIQUE NOT NULL
+	,developer VARCHAR(30) UNIQUE NOT NULL
 );
 
 CREATE TABLE community_data.publishers (
 	publisher_id SERIAL PRIMARY KEY
-	,publisher VARCHAR(20)
+	,publisher VARCHAR(30)
 );
 
 CREATE TABLE community_data.content_ratings (
 	content_rating_id SERIAL PRIMARY KEY
-	,content_rating VARCHAR(5) UNIQUE NOT NULL
+	,content_rating VARCHAR(20) UNIQUE NOT NULL
 );
 
 CREATE TABLE community_data.games (
@@ -120,5 +120,3 @@ CREATE TABLE community_data.inbox_messages (
 	,message_text VARCHAR(400)
 	,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
