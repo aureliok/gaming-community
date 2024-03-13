@@ -4,5 +4,6 @@
     {
         public int DeveloperId { get; }
         public string DeveloperName { get; set; }
+        public ICollection<Game> Games { get; set; }
     }
 }
