@@ -6,7 +6,7 @@ namespace GamingCommunity.Entities
     {
         public DbSet<User> Users { get; set; }
         public DbSet<UserLevel> UserLevels { get; set; }
-        public DbSet<GamingThread> Threads { get; set; }
+        public DbSet<GamingThread> GamingThreads { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
