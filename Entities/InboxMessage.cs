@@ -1,10 +1,12 @@
-﻿namespace GamingCommunity.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace GamingCommunity.Entities
 {
     public class InboxMessage
     {
         public int MessageId { get; }
-        public User Sender { get; set; }
-        public User Receiver { get; set; }
+        public int SenderId { get; set; }
+        public int RecipientId { get; set; }
         public string MessageText { get; set; }
         public DateTime CreatedAt { get; set; }
     }

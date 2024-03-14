@@ -14,10 +14,12 @@ DROP TABLE IF EXISTS community_data.genres;
 DROP TABLE IF EXISTS community_data.users;
 DROP TABLE IF EXISTS community_data.user_levels;
 
+migrationBuilder.Sql("ALTER TABLE game_reviews ADD CONSTRAINT CK_score CHECK (score IN (1, 2, 3, 4, 5))");
+migrationBuilder.Sql("ALTER TABLE user_connections ADD CONSTRAINT CK_connection CHECK (connection_type IN ('friend', 'follower', 'following'))");
 
 CREATE TABLE community_data.user_levels (
 	level_id SERIAL PRIMARY KEY
-	,user_level VARCHAR(20) NOT NULL DEFAULT 'user' 
+	,user_level VARCHAR(20) UNIQUE NOT NULL
 );
 
 CREATE TABLE community_data.users (
@@ -86,7 +88,7 @@ CREATE TABLE community_data.content_ratings (
 
 CREATE TABLE community_data.games (
 	game_id SERIAL PRIMARY KEY
-	,title VARCHAR(60)
+	,title VARCHAR(60) NOT NULL
 	,release_date DATE
 	,genre_id INT NOT NULL REFERENCES community_data.genres(genre_id)
 	,platform_id INT NOT NULL REFERENCES community_data.platforms(platform_id)

@@ -1,7 +1,18 @@
+using GamingCommunity.Entities;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<GamingCommunityDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), dbOptions =>
+    {
+        dbOptions.MigrationsHistoryTable("__EFMigrationsHistory", "community_data");
+    });
+});
 
 var app = builder.Build();
 

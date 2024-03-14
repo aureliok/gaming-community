@@ -45,7 +45,7 @@ INSERT INTO community_data.comments (content, created_at, user_id, thread_id) VA
 INSERT INTO community_data.votes (vote_type, user_id, thread_id, comment_id) VALUES
     ('upvote', 1, 1, 1)
     ,('downvote', 2, 1, NULL)
-    ,('upvote', 3, 2, 2)
+    ,('upvote', 3, NULL, 2)
     ,('downvote', 4, 2, NULL)
     ,('upvote', 5, 3, NULL)
     ,('downvote', 1, 3, NULL)

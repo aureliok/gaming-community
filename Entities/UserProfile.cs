@@ -1,11 +1,12 @@
-﻿namespace GamingCommunity.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace GamingCommunity.Entities
 {
     public class UserProfile
     {
-        public int UserProfileId { get; }
-        public string Bio { get; set; }
-        public string AvatarId { get; set; }
-        public string GamingPlatformLink { get; set; }
-        public User User { get; set; }
+        public int UserId { get; }
+        public string? Bio { get; set; }
+        public string? AvatarId { get; set; }
+        public string? GamingPlatformLink { get; set; }
     }
 }
