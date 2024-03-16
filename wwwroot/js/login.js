@@ -45,7 +45,7 @@ function handleLogin() {
                     usernameOrEmail = document.getElementById("usernameOrEmail").value;
                     password = document.getElementById("password").value;
                     console.log(usernameOrEmail, password);
-                    return [4 /*yield*/, fetch("/api/login", {
+                    return [4 /*yield*/, fetch("/Login", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"

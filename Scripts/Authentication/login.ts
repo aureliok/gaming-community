@@ -6,7 +6,7 @@ async function handleLogin() {
 
     console.log(usernameOrEmail, password);
 
-    const response = await fetch("/api/login", {
+    const response = await fetch("/Login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

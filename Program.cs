@@ -1,4 +1,5 @@
 using GamingCommunity.Entities;
+using GamingCommunity.Middlewares;
 using GamingCommunity.Repositories.Implementations;
 using GamingCommunity.Repositories.Interfaces;
 using GamingCommunity.Services.Implementations;
@@ -8,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+
+string issuer = "myself";
+string audience = "someone";
+string secretKey = "your_secret_key_gaming_community";
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +31,7 @@ builder.Services.AddDbContext<GamingCommunityDbContext>(options =>
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenService>(sp => new TokenService(issuer, audience, secretKey));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -36,9 +42,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "myself",
-            ValidAudience = "someone",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key"))
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
         };
     });
 
@@ -55,6 +61,8 @@ var app = builder.Build();
 
 var logger = app.Logger;
 logger.LogInformation("Application started.");
+
+app.UseMiddleware<AuthenticationMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -6,24 +6,26 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace GamingCommunity.Controllers.Authentication
 {
-    public class LoginController : Controller
+    public class AuthenticationController : Controller
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly ITokenService _tokenService;
         
-        public LoginController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService, ITokenService tokenService)
         {
             _authenticationService = authenticationService;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
-        [Route("api/login")]
+        [Route("Login", Name = "Login")]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("api/login")]
+        [Route("Login")]
         [SwaggerOperation(Summary = "Authenticate user")]
         [SwaggerResponse(200, "Success")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -35,6 +37,16 @@ namespace GamingCommunity.Controllers.Authentication
 
             if (await _authenticationService.AuthenticateAsync(model.UsernameOrEmail, model.Password))
             {
+                var token = _tokenService.GenerateJwtToken(model.UsernameOrEmail);
+
+                Response.Cookies.Append("jwtToken_gcom", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddDays(7)
+                });
+
                 return Ok();
             }
             else

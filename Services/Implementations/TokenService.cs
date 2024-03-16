@@ -29,7 +29,7 @@ namespace GamingCommunity.Services.Implementations
                 {
                     new Claim(ClaimTypes.Name, userId)
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddMonths(1),
                 Audience = _audience,
                 Issuer = _issuer,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
