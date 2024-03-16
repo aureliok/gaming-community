@@ -1,11 +1,20 @@
 using GamingCommunity.Entities;
+using GamingCommunity.Repositories.Implementations;
+using GamingCommunity.Repositories.Interfaces;
+using GamingCommunity.Services.Implementations;
+using GamingCommunity.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+// Configure DbContext
 builder.Services.AddDbContext<GamingCommunityDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), dbOptions =>
@@ -14,7 +23,33 @@ builder.Services.AddDbContext<GamingCommunityDbContext>(options =>
     });
 });
 
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "myself",
+            ValidAudience = "someone",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key"))
+        };
+    });
+
+
+builder.Services.AddRazorPages();
+
+builder.Logging.AddConsole();
+
 var app = builder.Build();
+
+var logger = app.Logger;
+logger.LogInformation("Application started.");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -31,8 +66,12 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+app.MapRazorPages();
 
 app.Run();

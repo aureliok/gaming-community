@@ -31,11 +31,12 @@ namespace GamingCommunity.Entities
 
                 entity.Property(p => p.UserId).HasColumnName("user_id");
                 entity.Property(p => p.UserName).HasColumnName("username")
-                                                .HasMaxLength(50);
+                                                .HasMaxLength(50)
+                                                .HasAnnotation("RegularExpression", @"^[^@]+$");
                 entity.Property(p => p.Email).HasColumnName("email")
                                              .HasMaxLength(100);
                 entity.Property(p => p.PasswordHash).HasColumnName("password_hash")
-                                                    .HasMaxLength(20);
+                                                    .HasMaxLength(60);
                 entity.Property(p => p.LevelId).HasColumnName("level_id");
 
                 entity.HasOne<UserLevel>()

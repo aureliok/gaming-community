@@ -18,6 +18,13 @@ namespace GamingCommunity.Repositories.Implementations
             return await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
         }
 
+        public async Task<User> GetByUsernameOrEmailAsync(string userIdentification)
+        {
+            return await _context.Users
+                    .SingleOrDefaultAsync(x => x.Email == userIdentification || x.UserName == userIdentification);
+        }
+
+
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();

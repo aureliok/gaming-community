@@ -4,16 +4,16 @@ INSERT INTO community_data.user_levels (user_level) VALUES
     ,('Admin');
 
 INSERT INTO community_data.users (username, email, password_hash, level_id) VALUES
-    ('user1', 'user1@example.com', 'hashed_password_1', 1)
-    ,('user2', 'user2@example.com', 'hashed_password_2', 1)
-    ,('user3', 'user3@example.com', 'hashed_password_3', 1)
-    ,('user4', 'user4@example.com', 'hashed_password_4', 1)
-    ,('user5', 'user5@example.com', 'hashed_password_5', 1)
-    ,('superuser1', 'superuser1@example.com', 'hashed_password_6', 2)
-    ,('superuser2', 'superuser2@example.com', 'hashed_password_7', 2)
-    ,('superuser3', 'superuser3@example.com', 'hashed_password_8', 2)
-    ,('admin1', 'admin1@example.com', 'hashed_password_9', 3)
-    ,('admin2', 'admin2@example.com', 'hashed_password_10', 3);
+    ('user1', 'user1@example.com', '$2a$11$bdHY56Ohiy2dEgQCuOchZOFKetK5pxJ8fVcp8JyUVv2fz//6gINa.', 1)
+    ,('user2', 'user2@example.com', '$2a$11$bg7zO8trpOGFib2zFl6B5uKYUf7bME/Jfmo5DG1fqCmeDnhPRDjBC', 1)
+    ,('user3', 'user3@example.com', '$2a$11$cRTNx5QSqek6I7BzIkbSa.7wLBwtRl.khsp/SICbIl0IWd1wxcSra', 1)
+    ,('user4', 'user4@example.com', '$2a$11$07IwARZVOIMex4kpiVPXpucEybxl5Bx/3vJWX7EH5v8sOE4L6FpoO', 1)
+    ,('user5', 'user5@example.com', '$2a$11$3bJZonAy7Mz1YuEPw5g4a.g86IGdRipEbHqdtseEnm533Y.g9mvZe', 1)
+    ,('superuser1', 'superuser1@example.com', '$2a$11$RVIyryWfZTMQlFsxVQ0hve8axVbs./H2GEyAPkIXVBL5FIq0uKts2', 2)
+    ,('superuser2', 'superuser2@example.com', '$2a$11$96d9qa/c0zdGLLIkjkp2uOe5inS.68hOvNtqNcXHpRaznQJ1/s9Ea', 2)
+    ,('superuser3', 'superuser3@example.com', '$2a$11$BU.wgGkvFp.7rL9K0/kxquSaW1lmThwCZs7nInc7MfCS3r//W/Boe', 2)
+    ,('admin1', 'admin1@example.com', '$2a$11$7NZDxUW.y7VaH4OmUw4ReO5el/otrv3PTLv8LQuZAYMnutdn0tjCu', 3)
+    ,('admin2', 'admin2@example.com', '$2a$11$c5eQGdBBUdsOsZzZWVPSZOXbUP1wR.9qwDnsm7E0sxBStVqQhR7Um', 3);
 
 
 INSERT INTO community_data.threads (title, content, created_at, user_id) VALUES
