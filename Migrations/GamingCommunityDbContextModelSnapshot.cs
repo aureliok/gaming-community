@@ -359,15 +359,16 @@ namespace GamingCommunity.Migrations
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)")
                         .HasColumnName("password_hash");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("username");
+                        .HasColumnName("username")
+                        .HasAnnotation("RegularExpression", "^[^@]+$");
 
                     b.HasKey("UserId");
 

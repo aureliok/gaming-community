@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamingCommunity.Migrations
 {
     [DbContext(typeof(GamingCommunityDbContext))]
-    [Migration("20240314230927_InsertMockData")]
+    [Migration("20240316120235_InsertMockData")]
     partial class InsertMockData
     {
         /// <inheritdoc />
@@ -362,15 +362,16 @@ namespace GamingCommunity.Migrations
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)")
                         .HasColumnName("password_hash");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("username");
+                        .HasColumnName("username")
+                        .HasAnnotation("RegularExpression", "^[^@]+$");
 
                     b.HasKey("UserId");
 

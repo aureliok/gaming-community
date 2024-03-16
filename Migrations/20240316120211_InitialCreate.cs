@@ -164,7 +164,7 @@ namespace GamingCommunity.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    password_hash = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    password_hash = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
                     level_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
