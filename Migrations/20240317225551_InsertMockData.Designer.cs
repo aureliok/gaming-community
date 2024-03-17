@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamingCommunity.Migrations
 {
     [DbContext(typeof(GamingCommunityDbContext))]
-    [Migration("20240316120211_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240317225551_InsertMockData")]
+    partial class InsertMockData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -350,6 +350,10 @@ namespace GamingCommunity.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date")
+                        .HasColumnName("birth_date");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -357,7 +361,9 @@ namespace GamingCommunity.Migrations
                         .HasColumnName("email");
 
                     b.Property<int>("LevelId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(1)
                         .HasColumnName("level_id");
 
                     b.Property<string>("PasswordHash")
@@ -366,7 +372,7 @@ namespace GamingCommunity.Migrations
                         .HasColumnType("character varying(60)")
                         .HasColumnName("password_hash");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
@@ -377,7 +383,7 @@ namespace GamingCommunity.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.HasIndex("UserName")
+                    b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("users", "community_data");

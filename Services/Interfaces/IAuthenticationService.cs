@@ -1,6 +1,4 @@
-﻿using GamingCommunity.Entities;
-
-namespace GamingCommunity.Services.Interfaces
+﻿namespace GamingCommunity.Services.Interfaces
 {
     public interface IAuthenticationService
     {

@@ -4,7 +4,6 @@ async function handleLogin() {
     const usernameOrEmail = (<HTMLInputElement>document.getElementById("usernameOrEmail")).value;
     const password = (<HTMLInputElement>document.getElementById("password")).value;
 
-    console.log(usernameOrEmail, password);
 
     const response = await fetch("/Login", {
         method: "POST",

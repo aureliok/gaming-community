@@ -24,6 +24,13 @@ namespace GamingCommunity.Controllers.Authentication
             return View();
         }
 
+        [HttpGet]
+        [Route("Register", Name = "Register")]
+        public IActionResult Registration()
+        {
+            return View();
+        }
+
         [HttpPost]
         [Route("Login")]
         [SwaggerOperation(Summary = "Authenticate user")]

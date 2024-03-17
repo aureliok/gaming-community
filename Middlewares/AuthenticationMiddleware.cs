@@ -23,11 +23,6 @@ namespace GamingCommunity.Middlewares
         {
             if (context.Request.Path.StartsWithSegments("/Community"))
             {
-                //if (!context.User.Identity.IsAuthenticated)
-                //{
-                //    context.Response.Redirect("/api/login");
-                //    return;
-                //}
                 var token = context.Request.Cookies["jwtToken_gcom"];
 
                 if (string.IsNullOrEmpty(token))
