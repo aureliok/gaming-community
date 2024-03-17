@@ -27,16 +27,19 @@ namespace GamingCommunity.Entities
             {
                 entity.ToTable("users");
                 entity.HasKey(p => p.UserId);
-                entity.HasIndex(p => p.UserName).IsUnique();
+                entity.HasIndex(p => p.Username).IsUnique();
 
                 entity.Property(p => p.UserId).HasColumnName("user_id");
-                entity.Property(p => p.UserName).HasColumnName("username")
-                                                .HasMaxLength(50);
+                entity.Property(p => p.Username).HasColumnName("username")
+                                                .HasMaxLength(50)
+                                                .HasAnnotation("RegularExpression", @"^[^@]+$");
                 entity.Property(p => p.Email).HasColumnName("email")
                                              .HasMaxLength(100);
+                entity.Property(p => p.BirthDate).HasColumnName("birth_date");
                 entity.Property(p => p.PasswordHash).HasColumnName("password_hash")
-                                                    .HasMaxLength(20);
-                entity.Property(p => p.LevelId).HasColumnName("level_id");
+                                                    .HasMaxLength(60);
+                entity.Property(p => p.LevelId).HasColumnName("level_id")
+                                               .HasDefaultValue(1);
 
                 entity.HasOne<UserLevel>()
                       .WithMany()

@@ -1,4 +1,16 @@
-INSERT INTO community_data.user_levels (user_level) VALUES
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace GamingCommunity.Migrations
+{
+    /// <inheritdoc />
+    public partial class InsertMockData : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.Sql(@"INSERT INTO community_data.user_levels (user_level) VALUES
     ('User')
     ,('Super User')
     ,('Admin');
@@ -180,3 +192,13 @@ INSERT INTO community_data.inbox_messages (sender_id, recipient_id, message_text
     ,(7, 6, 'Sure, sounds good!', '2023-04-01 11:15:00')
     ,(8, 9, 'Did you see the latest game announcement?', '2023-05-01 12:00:00')
     ,(9, 8, 'Yes, it looks amazing!', '2023-05-01 12:15:00');
+");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+
+        }
+    }
+}
