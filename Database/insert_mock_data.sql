@@ -3,17 +3,17 @@ INSERT INTO community_data.user_levels (user_level) VALUES
     ,('Super User')
     ,('Admin');
 
-INSERT INTO community_data.users (username, email, birth_date, password_hash, level_id) VALUES
-    ('user1', 'user1@example.com', '2000-01-03', '$2a$11$bdHY56Ohiy2dEgQCuOchZOFKetK5pxJ8fVcp8JyUVv2fz//6gINa.', 1)
-    ,('user2', 'user2@example.com', '1995-05-06', '$2a$11$bg7zO8trpOGFib2zFl6B5uKYUf7bME/Jfmo5DG1fqCmeDnhPRDjBC', 1)
-    ,('user3', 'user3@example.com', '1980-04-20', '$2a$11$cRTNx5QSqek6I7BzIkbSa.7wLBwtRl.khsp/SICbIl0IWd1wxcSra', 1)
-    ,('user4', 'user4@example.com', '1999-12-28', '$2a$11$07IwARZVOIMex4kpiVPXpucEybxl5Bx/3vJWX7EH5v8sOE4L6FpoO', 1)
-    ,('user5', 'user5@example.com', '1989-08-01', '$2a$11$3bJZonAy7Mz1YuEPw5g4a.g86IGdRipEbHqdtseEnm533Y.g9mvZe', 1)
-    ,('superuser1', 'superuser1@example.com', '1975-06-03', '$2a$11$RVIyryWfZTMQlFsxVQ0hve8axVbs./H2GEyAPkIXVBL5FIq0uKts2', 2)
-    ,('superuser2', 'superuser2@example.com', '2002-02-03', '$2a$11$96d9qa/c0zdGLLIkjkp2uOe5inS.68hOvNtqNcXHpRaznQJ1/s9Ea', 2)
-    ,('superuser3', 'superuser3@example.com', '2001-03-03', '$2a$11$BU.wgGkvFp.7rL9K0/kxquSaW1lmThwCZs7nInc7MfCS3r//W/Boe', 2)
-    ,('admin1', 'admin1@example.com', '1960-01-01', '$2a$11$7NZDxUW.y7VaH4OmUw4ReO5el/otrv3PTLv8LQuZAYMnutdn0tjCu', 3)
-    ,('admin2', 'admin2@example.com', '1996-10-12', '$2a$11$c5eQGdBBUdsOsZzZWVPSZOXbUP1wR.9qwDnsm7E0sxBStVqQhR7Um', 3);
+INSERT INTO community_data.users (username, email, password_hash, level_id) VALUES
+    ('user1', 'user1@example.com', '$2a$11$bdHY56Ohiy2dEgQCuOchZOFKetK5pxJ8fVcp8JyUVv2fz//6gINa.', 1)
+    ,('user2', 'user2@example.com', '$2a$11$bg7zO8trpOGFib2zFl6B5uKYUf7bME/Jfmo5DG1fqCmeDnhPRDjBC', 1)
+    ,('user3', 'user3@example.com', '$2a$11$cRTNx5QSqek6I7BzIkbSa.7wLBwtRl.khsp/SICbIl0IWd1wxcSra', 1)
+    ,('user4', 'user4@example.com', '$2a$11$07IwARZVOIMex4kpiVPXpucEybxl5Bx/3vJWX7EH5v8sOE4L6FpoO', 1)
+    ,('user5', 'user5@example.com', '$2a$11$3bJZonAy7Mz1YuEPw5g4a.g86IGdRipEbHqdtseEnm533Y.g9mvZe', 1)
+    ,('superuser1', 'superuser1@example.com', '$2a$11$RVIyryWfZTMQlFsxVQ0hve8axVbs./H2GEyAPkIXVBL5FIq0uKts2', 2)
+    ,('superuser2', 'superuser2@example.com', '$2a$11$96d9qa/c0zdGLLIkjkp2uOe5inS.68hOvNtqNcXHpRaznQJ1/s9Ea', 2)
+    ,('superuser3', 'superuser3@example.com', '$2a$11$BU.wgGkvFp.7rL9K0/kxquSaW1lmThwCZs7nInc7MfCS3r//W/Boe', 2)
+    ,('admin1', 'admin1@example.com', '$2a$11$7NZDxUW.y7VaH4OmUw4ReO5el/otrv3PTLv8LQuZAYMnutdn0tjCu', 3)
+    ,('admin2', 'admin2@example.com', '$2a$11$c5eQGdBBUdsOsZzZWVPSZOXbUP1wR.9qwDnsm7E0sxBStVqQhR7Um', 3);
 
 
 INSERT INTO community_data.threads (title, content, created_at, user_id) VALUES
@@ -55,17 +55,17 @@ INSERT INTO community_data.votes (vote_type, user_id, thread_id, comment_id) VAL
     ,('downvote', 5, 5, NULL);
 
 
-INSERT INTO community_data.user_profiles (user_id, bio, avatar_id, gaming_platform_link) VALUES
-    (1, 'I love gaming!', MD5(random()::text), 'https://example.com/platform1')
-    ,(2, 'Gamer for life!', MD5(random()::text), 'https://example.com/platform2')
-    ,(3, 'Gaming is my passion', MD5(random()::text), 'https://example.com/platform3')
-    ,(4, 'Professional gamer', MD5(random()::text), 'https://example.com/platform4')
-    ,(5, 'Gaming enthusiast', MD5(random()::text), 'https://example.com/platform5')
-    ,(6, 'Casual gamer', MD5(random()::text), 'https://example.com/platform6')
-    ,(7, 'Competitive gamer', MD5(random()::text), 'https://example.com/platform7')
-    ,(8, 'Gamer geek', MD5(random()::text), 'https://example.com/platform8')
-    ,(9, 'Gaming addict', MD5(random()::text), 'https://example.com/platform9')
-    ,(10, 'Gaming for fun', MD5(random()::text), 'https://example.com/platform10');
+INSERT INTO community_data.user_profiles (user_id, bio, avatar_id, gender, birth_date, gaming_platform_link) VALUES
+    (1, 'I love gaming!', 'randomstring', 'F', '2000-01-03', 'https://example.com/platform1')
+    ,(2, 'Gamer for life!', 'randomstring222', 'M', '1995-05-06', 'https://example.com/platform2')
+    ,(3, 'Gaming is my passion', 'soqksoqp', 'Other', '1980-04-20', 'https://example.com/platform3')
+    ,(4, 'Professional gamer', 'djsadj', 'F','1999-12-28', 'https://example.com/platform4')
+    ,(5, 'Gaming enthusiast', 'dsadapop', 'M','1989-08-01', 'https://example.com/platform5')
+    ,(6, 'Casual gamer', 'M', 'kpkepo', '1975-06-03', 'https://example.com/platform6')
+    ,(7, 'Competitive gamer', 'djasdjao', 'M','2002-02-03', 'https://example.com/platform7')
+    ,(8, 'Gamer geek', 'dsjdaso', 'Other','2001-03-03', 'https://example.com/platform8')
+    ,(9, 'Gaming addict', 'mkmkmkm', 'F', '1960-01-01', 'https://example.com/platform9')
+    ,(10, 'Gaming for fun', 'jdijodawjdo', 'M', '1996-10-12', 'https://example.com/platform10');
 
 
 INSERT INTO community_data.genres (genre) VALUES

@@ -347,10 +347,6 @@ namespace GamingCommunity.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
-                    b.Property<DateOnly>("BirthDate")
-                        .HasColumnType("date")
-                        .HasColumnName("birth_date");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -466,9 +462,18 @@ namespace GamingCommunity.Migrations
                         .HasColumnType("text")
                         .HasColumnName("bio");
 
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date")
+                        .HasColumnName("birth_date");
+
                     b.Property<string>("GamingPlatformLink")
                         .HasColumnType("text")
                         .HasColumnName("gaming_platform_link");
+
+                    b.Property<string>("Gender")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("gender");
 
                     b.HasKey("UserId");
 

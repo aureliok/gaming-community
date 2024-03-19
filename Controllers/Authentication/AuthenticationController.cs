@@ -1,5 +1,5 @@
 ﻿using GamingCommunity.Models;
-using GamingCommunity.Repositories.Interfaces;
+using GamingCommunity.Entities;
 using GamingCommunity.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -42,9 +42,11 @@ namespace GamingCommunity.Controllers.Authentication
                 return BadRequest(ModelState);
             }
 
-            if (await _authenticationService.AuthenticateAsync(model.UsernameOrEmail, model.Password))
+            User user = await _authenticationService.AuthenticateAsync(model.UsernameOrEmail, model.Password);
+
+            if (user != null)
             {
-                var token = _tokenService.GenerateJwtToken(model.UsernameOrEmail);
+                var token = _tokenService.GenerateJwtToken(user.UserId, user.Username);
 
                 Response.Cookies.Append("jwtToken_gcom", token, new CookieOptions
                 {
@@ -61,6 +63,15 @@ namespace GamingCommunity.Controllers.Authentication
                 ModelState.AddModelError(string.Empty, "Invalid username or password.");
                 return Unauthorized();
             }
+        }
+
+        [HttpGet]
+        [Route("Logout", Name = "Logout")]
+        public ActionResult Logout()
+        {
+            Response.Cookies.Delete("jwtToken_gcom");
+
+            return RedirectToAction("Login", "Authentication");
         }
     }
 }

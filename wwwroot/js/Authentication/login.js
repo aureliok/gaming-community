@@ -55,6 +55,7 @@ function handleLogin() {
                     response = _a.sent();
                     if (response.ok) {
                         alert("login ok!");
+                        window.location.href = "/Home/Index";
                     }
                     else {
                         alert("login fail");

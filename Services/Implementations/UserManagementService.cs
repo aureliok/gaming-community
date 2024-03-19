@@ -8,10 +8,12 @@ namespace GamingCommunity.Services.Implementations
     public class UserManagementService : IUserManagementService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public UserManagementService(IUserRepository userRepository)
+        public UserManagementService(IUserRepository userRepository, IUserProfileRepository userProfileRepository)
         {
             _userRepository = userRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         public async Task<bool> CheckIfUserExists(string usernameOrEmail)
@@ -38,13 +40,6 @@ namespace GamingCommunity.Services.Implementations
 
         public async Task<bool> RegisterNewUser(string username, string email, string password, DateOnly birthDate)
         {
-            //bool existUsername = await CheckIfUserExists(username);
-            //bool existEmail = await CheckIfEmailExists(email);
-
-            //if (existUsername || existEmail)
-            //{
-            //    return false;
-            //}
 
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
@@ -53,10 +48,19 @@ namespace GamingCommunity.Services.Implementations
                 Username = username,
                 Email = email,
                 PasswordHash = passwordHash,
-                BirthDate = birthDate
             };
 
             await _userRepository.AddAsync(user);
+
+
+            UserProfile profile = new UserProfile()
+            {
+                UserId = user.UserId,
+                BirthDate = birthDate,
+            };
+
+            await _userProfileRepository.AddAsync(profile);
+           
 
             return true;
         }

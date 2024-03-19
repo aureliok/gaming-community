@@ -35,7 +35,6 @@ namespace GamingCommunity.Entities
                                                 .HasAnnotation("RegularExpression", @"^[^@]+$");
                 entity.Property(p => p.Email).HasColumnName("email")
                                              .HasMaxLength(100);
-                entity.Property(p => p.BirthDate).HasColumnName("birth_date");
                 entity.Property(p => p.PasswordHash).HasColumnName("password_hash")
                                                     .HasMaxLength(60);
                 entity.Property(p => p.LevelId).HasColumnName("level_id")
@@ -116,6 +115,9 @@ namespace GamingCommunity.Entities
                 entity.Property(p => p.Bio).HasColumnName("bio");
                 entity.Property(p => p.AvatarId).HasColumnName("avatar_id")
                                                 .HasMaxLength(32);
+                entity.Property(p => p.Gender).HasColumnName("gender")
+                                                              .HasMaxLength(10);
+                entity.Property(p => p.BirthDate).HasColumnName("birth_date");
                 entity.Property(p => p.GamingPlatformLink).HasColumnName("gaming_platform_link");
 
                 entity.HasOne<User>()

@@ -19,6 +19,12 @@ namespace GamingCommunity.Controllers.Community
             return View();
         }
 
+        public IActionResult YourProfile()
+        {
+            return View();
+        }
+
+
         [HttpPost]
         [Route("RegisterUser", Name = "RegisterUser")]
         [SwaggerOperation(Summary = "Register new user")]

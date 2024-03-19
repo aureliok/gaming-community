@@ -19,7 +19,7 @@ namespace GamingCommunity.Services.Implementations
             _secretKey = secretKey;
         }
 
-        public string GenerateJwtToken(string userId)
+        public string GenerateJwtToken(int userId, string username)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secretKey);
@@ -27,7 +27,8 @@ namespace GamingCommunity.Services.Implementations
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, userId)
+                    new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                    new Claim(ClaimTypes.Name, username)
                 }),
                 Expires = DateTime.UtcNow.AddMonths(1),
                 Audience = _audience,

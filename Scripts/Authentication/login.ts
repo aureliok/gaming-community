@@ -12,9 +12,10 @@ async function handleLogin() {
         },
         body: JSON.stringify({ UsernameOrEmail: usernameOrEmail, Password: password })
     });
-
+    
     if (response.ok) {
         alert("login ok!");
+        window.location.href = "/Home/Index";
     } else {
         alert("login fail");
     }
@@ -24,4 +25,5 @@ async function handleLogin() {
 loginForm?.addEventListener("submit", async function (e) {
     e.preventDefault();
     await handleLogin();
+
 });

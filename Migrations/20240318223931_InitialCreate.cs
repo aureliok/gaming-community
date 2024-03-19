@@ -164,7 +164,6 @@ namespace GamingCommunity.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    birth_date = table.Column<DateOnly>(type: "date", nullable: false),
                     password_hash = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
                     level_id = table.Column<int>(type: "integer", nullable: false, defaultValue: 1)
                 },
@@ -306,6 +305,8 @@ namespace GamingCommunity.Migrations
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     bio = table.Column<string>(type: "text", nullable: true),
                     avatar_id = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    gender = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
+                    birth_date = table.Column<DateOnly>(type: "date", nullable: false),
                     gaming_platform_link = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
