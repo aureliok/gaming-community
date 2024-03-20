@@ -67,5 +67,6 @@ namespace GamingCommunity.Controllers.UserManagement
                 return BadRequest($"Failed to change username: {ex.Message}");
             }
         }
+ 
     }
 }
