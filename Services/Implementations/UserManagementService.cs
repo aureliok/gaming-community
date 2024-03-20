@@ -71,25 +71,25 @@ namespace GamingCommunity.Services.Implementations
             await _userRepository.DeleteAsync(user.UserId);
         }
 
-        public async void ChangeUsername(string usernameOrEmail, string newUsername)
+        public async Task ChangeUsername(int userId, string newUsername)
         {
-            User user = await _userRepository.GetByUsernameOrEmailAsync(usernameOrEmail);
+            User user = await _userRepository.GetByIdAsync(userId);
             user.Username = newUsername;
             await _userRepository.UpdateAsync(user);
         }
 
-        public async void ChangePassword(string usernameOrEmail, string newPassword)
+        public async Task ChangePassword(int userId, string newPassword)
         {
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
-            User user = await _userRepository.GetByUsernameOrEmailAsync(usernameOrEmail);
+            User user = await _userRepository.GetByIdAsync(userId);
             user.PasswordHash = passwordHash;
 
             await _userRepository.UpdateAsync(user);
         }
 
-        public async void ChangeEmail(string usernameOrEmail, string newEmail)
+        public async Task ChangeEmail(int userId, string newEmail)
         {
-            User user = await _userRepository.GetByUsernameOrEmailAsync(usernameOrEmail);
+            User user = await _userRepository.GetByIdAsync(userId);
             user.Email = newEmail;
 
             await _userRepository.UpdateAsync(user);

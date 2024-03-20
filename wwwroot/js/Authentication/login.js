@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var loginForm = document.getElementById("loginForm");
+var signUpBtn = document.getElementById("signUpBtn");
 function handleLogin() {
     return __awaiter(this, void 0, void 0, function () {
         var usernameOrEmail, password, response;
@@ -78,5 +79,8 @@ loginForm === null || loginForm === void 0 ? void 0 : loginForm.addEventListener
             }
         });
     });
+});
+signUpBtn === null || signUpBtn === void 0 ? void 0 : signUpBtn.addEventListener("click", function () {
+    window.location.href = "/Register";
 });
 //# sourceMappingURL=login.js.map

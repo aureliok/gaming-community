@@ -38,15 +38,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var registrationForm = document.getElementById("registrationForm");
 var usernameInput = document.getElementById("username");
 var emailInput = document.getElementById("email");
+var passwordInput = document.getElementById("password");
 var confirmPasswordInput = document.getElementById("confirmPassword");
 var birthDateInput = document.getElementById("birthDate");
 var usernameAvailability = document.getElementById("usernameAvailability");
 var emailAvailability = document.getElementById("emailAvailability");
+var strongPassword = document.getElementById("validPassword");
 var passwordEquality = document.getElementById("confirmPasswordEqual");
 var birthDateWarning = document.getElementById("birthDateWarning");
+var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 var validUser = false;
 var validEmail = false;
 var validPassword = false;
+var equalPassword = false;
 var validBDate = false;
 function checkUsernameAvailability() {
     return __awaiter(this, void 0, void 0, function () {
@@ -83,13 +88,21 @@ function checkUsernameAvailability() {
         });
     });
 }
-function checkEmailAvailability() {
+function isEmail(input) {
+    return emailRegex.test(input);
+}
+function checkEmailInput() {
     return __awaiter(this, void 0, void 0, function () {
         var email, response;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     email = emailInput.value;
+                    if (!isEmail(email)) {
+                        validEmail = false;
+                        emailAvailability.innerText = "Not a valid email";
+                        return [2 /*return*/];
+                    }
                     return [4 /*yield*/, fetch("/CheckIfEmailExists", {
                             method: "POST",
                             headers: {
@@ -106,7 +119,7 @@ function checkEmailAvailability() {
                     }
                     else if (response.status == 404) {
                         console.log("email does not exist");
-                        emailAvailability.innerText = "Email is not registered to another account.";
+                        emailAvailability.innerText = "Email is available.";
                         validEmail = true;
                     }
                     else {
@@ -117,15 +130,26 @@ function checkEmailAvailability() {
         });
     });
 }
+function checkPassword() {
+    var password = passwordInput.value;
+    if (passwordRegex.test(password)) {
+        validPassword = true;
+        strongPassword.innerText = "Password is valid.";
+    }
+    else {
+        validPassword = true;
+        strongPassword.innerText = "Your Password must have 8 digits and contain at least one digit and at least one of lowercase, uppercase and special characters.";
+    }
+}
 function checkIfPasswordEqual() {
     var passwordInput = document.getElementById("password");
     if (passwordInput.value != confirmPasswordInput.value) {
         passwordEquality.innerText = "Passwords does not match";
-        validPassword = false;
+        equalPassword = false;
     }
     else {
         passwordEquality.innerText = "Password OK";
-        validPassword = true;
+        equalPassword = true;
     }
 }
 function checkBirthDateValid() {
@@ -185,7 +209,7 @@ function registerNewUser() {
                         alert("All fields are required");
                         return [2 /*return*/];
                     }
-                    if (!validUser || !validEmail || !validPassword || !validBDate) {
+                    if (!validUser || !validEmail || !validPassword || !validBDate || !equalPassword) {
                         alert("A field might be incorrect, please review and fill again");
                         return [2 /*return*/];
                     }
@@ -208,7 +232,7 @@ function registerNewUser() {
                     return [4 /*yield*/, loginUser(username, password)];
                 case 2:
                     _a.sent();
-                    window.location.href = "/Community/Main";
+                    window.location.href = "/Home/Index";
                     return [3 /*break*/, 4];
                 case 3:
                     alert("Something went wrong");
@@ -219,7 +243,8 @@ function registerNewUser() {
     });
 }
 usernameInput.addEventListener("input", checkUsernameAvailability);
-emailInput.addEventListener("input", checkEmailAvailability);
+emailInput.addEventListener("input", checkEmailInput);
+passwordInput.addEventListener("input", checkPassword);
 confirmPasswordInput.addEventListener("input", checkIfPasswordEqual);
 birthDateInput.addEventListener("input", checkBirthDateValid);
 registrationForm.addEventListener("submit", function (e) {

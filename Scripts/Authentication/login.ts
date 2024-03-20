@@ -1,4 +1,5 @@
-﻿const loginForm = document.getElementById("loginForm");
+﻿const loginForm = <HTMLFormElement>document.getElementById("loginForm");
+const signUpBtn = <HTMLButtonElement>document.getElementById("signUpBtn");
 
 async function handleLogin() {
     const usernameOrEmail = (<HTMLInputElement>document.getElementById("usernameOrEmail")).value;
@@ -25,5 +26,7 @@ async function handleLogin() {
 loginForm?.addEventListener("submit", async function (e) {
     e.preventDefault();
     await handleLogin();
-
 });
+signUpBtn?.addEventListener("click", () => {
+    window.location.href = "/Register";
+})

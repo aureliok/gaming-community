@@ -1,16 +1,22 @@
 ﻿const registrationForm = <HTMLFormElement>document.getElementById("registrationForm");
 const usernameInput = <HTMLInputElement>document.getElementById("username");
 const emailInput = <HTMLInputElement>document.getElementById("email");
+const passwordInput = <HTMLInputElement>document.getElementById("password");
 const confirmPasswordInput = <HTMLInputElement>document.getElementById("confirmPassword");
 const birthDateInput = <HTMLInputElement>document.getElementById("birthDate");
 const usernameAvailability = <HTMLSpanElement>document.getElementById("usernameAvailability");
 const emailAvailability = <HTMLSpanElement>document.getElementById("emailAvailability");
+const strongPassword = <HTMLSpanElement>document.getElementById("validPassword");
 const passwordEquality = <HTMLSpanElement>document.getElementById("confirmPasswordEqual");
 const birthDateWarning = <HTMLSpanElement>document.getElementById("birthDateWarning");
+
+const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 let validUser: boolean = false;
 let validEmail: boolean = false;
 let validPassword: boolean = false;
+let equalPassword: boolean = false;
 let validBDate: boolean = false;
 
 async function checkUsernameAvailability(): Promise<void> {
@@ -37,8 +43,20 @@ async function checkUsernameAvailability(): Promise<void> {
     }
 }
 
-async function checkEmailAvailability(): Promise<void> {
+
+function isEmail(input: string): boolean {
+    return emailRegex.test(input);
+}
+
+
+async function checkEmailInput(): Promise<void> {
     const email = emailInput.value;
+
+    if (!isEmail(email)) {
+        validEmail = false;
+        emailAvailability.innerText = "Not a valid email";
+        return;
+    }
 
     const response = await fetch("/CheckIfEmailExists", {
         method: "POST",
@@ -54,10 +72,22 @@ async function checkEmailAvailability(): Promise<void> {
         validEmail = false;
     } else if (response.status == 404) {
         console.log("email does not exist");
-        emailAvailability.innerText = "Email is not registered to another account."
+        emailAvailability.innerText = "Email is available."
         validEmail = true;
     } else {
         console.log("failed to check");
+    }
+}
+
+function checkPassword(): void {
+    const password = passwordInput.value;
+
+    if (passwordRegex.test(password)) {
+        validPassword = true;
+        strongPassword.innerText = "Password is valid.";
+    } else {
+        validPassword = true;
+        strongPassword.innerText = "Your Password must have 8 digits and contain at least one digit and at least one of lowercase, uppercase and special characters.";
     }
 }
 
@@ -67,10 +97,10 @@ function checkIfPasswordEqual(): void {
 
     if (passwordInput.value != confirmPasswordInput.value) {
         passwordEquality.innerText = "Passwords does not match";
-        validPassword = false;
+        equalPassword = false;
     } else {
         passwordEquality.innerText = "Password OK";
-        validPassword = true;
+        equalPassword = true;
     }
 }
 
@@ -121,7 +151,7 @@ async function registerNewUser(): Promise<void> {
         return;
     }
 
-    if (!validUser || !validEmail || !validPassword || !validBDate) {
+    if (!validUser || !validEmail || !validPassword || !validBDate || !equalPassword) {
         alert("A field might be incorrect, please review and fill again");
         return;
     }
@@ -143,7 +173,7 @@ async function registerNewUser(): Promise<void> {
     if (response.ok) {
         alert("User has been registered!");
         await loginUser(username, password);
-        window.location.href = "/Community/Main";
+        window.location.href = "/Home/Index";
     } else {
         alert("Something went wrong");
     }
@@ -154,7 +184,8 @@ async function registerNewUser(): Promise<void> {
 
 
 usernameInput.addEventListener("input", checkUsernameAvailability);
-emailInput.addEventListener("input", checkEmailAvailability);
+emailInput.addEventListener("input", checkEmailInput);
+passwordInput.addEventListener("input", checkPassword);
 confirmPasswordInput.addEventListener("input", checkIfPasswordEqual);
 birthDateInput.addEventListener("input", checkBirthDateValid);
 
