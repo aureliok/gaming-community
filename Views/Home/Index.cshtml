@@ -6,11 +6,65 @@
     @if (User.Identity.IsAuthenticated)
     {
         <h1 class="display-4">Welcome, @User.Identity.Name!</h1>
-        <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     }
     else
     {
         <h1 class="display-4">Welcome!</h1>
-        <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     }
+        <div id="carouselIndex" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselIndex" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselIndex" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselIndex" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="carousel-text">
+                        <div class="container-lg">
+                            <a href="https://www.gameinformer.com/review/dragons-dogma-2/on-the-shoulders-of-giants" target="_blank">
+                                <img src="~/imgs/news/dd2_-_gryphon.jpg" class="d-block w-100 carousel-img" alt="...">
+                            </a>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h2 class="newsTitle">Dragon's Dogma 2 Review</h5>
+                                <h4 class="newsSubtitle">Check this review of Dragon's Dogma 2 on GameInformer!</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-text">
+                        <div class="container-lg">
+                            <a href="https://www.gameinformer.com/preview/2024/03/08/dlc-dose-of-leviathan" target="_blank">
+                                <img src="~/imgs/news/224821b29e04d6eb6ba5862addcf1b96.jpg" class="d-block w-100 carousel-img" alt="...">
+                            </a>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h2 class="newsTitle">Apex Legends Tournament Hacker Speaks</h2>
+                                <h4 class="newsSubtitle">"It was a joke"</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="carousel-text">
+                        <div class="container-lg">
+                            <a href="https://kotaku.com/apex-legends-global-series-hack-postpone-exploit-1851353297" target="_blank">
+                                <img src="~/imgs/news/ffxvitherisingtide01.jpg" class="d-block w-100 carousel-img" alt="...">
+                            </a>
+                            <div class="carousel-caption d-none d-md-block">
+                                <h2 class="newsTitle">Final Fantasy XVI: The Rising Tide</h2>
+                                <h4 class="newsSubtitle">A new DLC for your FFXVI's needs.</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselIndex" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselIndex" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
 </div>

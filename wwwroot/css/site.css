@@ -1,10 +1,17 @@
+:root {
+    --palettePurple: #430A5D;
+    --paletteBrown: #5F374B;
+    --paletteCoffee: #8C6A5D;
+    --paletteVintage: #EEE4B1;
+}
+
 html {
   font-size: 14px;
 }
 
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
+    font-size: 18px;
   }
 }
 
@@ -19,6 +26,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: antiquewhite;
 }
 
 .user-menu {
@@ -37,14 +45,39 @@ body {
 }
 
 .mini-avatar {
-    width: 100px;
-    height: 100px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--paletteVintage);
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
-.container-fluid {
-    background-color: #240A34;
+.username {
+    margin-left: 10px;
+    font-weight: bold;
+    color: var(--paletteVintage);
+}
+
+.navbar {
+    background-color: var(--palettePurple) !important;
+    z-index: 9;
+}
+
+.navbar-brand-container {
+    padding-left: 2%;
+}
+
+.navbar-brand {
+    color: var(--paletteVintage) !important;
+    font-weight: bold;
+    font-size: 30px;
 }
 
 .navbar .nav-link {
-    color: #FFEDD8 !important;
+    color: var(--paletteVintage) !important;
+    font-weight: bold;
+    padding-top: 10px !important;
+    padding-bottom: 0 !important;
 }
+

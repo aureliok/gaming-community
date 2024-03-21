@@ -1,0 +1,81 @@
+﻿:root {
+    --palettePurple: #430A5D;
+    --paletteBrown: #5F374B;
+    --paletteCoffee: #8C6A5D;
+    --paletteVintage: #EEE4B1;
+}
+
+.carousel-img {
+    border-radius: 10px;
+}
+
+.newsTitle {
+    font-size: 3.4em;
+}
+
+.newsSubtitle, .newsTitle {
+    color: white;
+    margin-bottom: 5%;
+    text-shadow: 
+            -1px -1px 0 black, 
+             1px -1px 0 black, 
+            -1px  1px 0 black, 
+             1px  1px 0 black;
+}
+
+
+/*main.cshtml*/
+.sidebar {
+    height: 100%;
+    width: 230px; /* Adjust as needed */
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin-top: 2%;
+    z-index: 1;
+    background-color: var(--palettePurple); /* Sidebar background color */
+    padding-top: 60px; /* Space for the top navbar */
+}
+
+.sidebar a {
+    padding: 10px;
+    margin-left: 15px;
+    margin-right: 25px;
+    text-decoration: none;
+    font-size: 18px;
+    color: var(--paletteVintage); /* Link color */
+    display: block;
+}
+
+
+
+/* Change the link color on hover */
+.sidebar a:hover {
+    background-color: #dee2e6; /* Hover color */
+    border-radius: 10px;
+    color: var(--palettePurple);
+}
+
+.division {
+    margin-top: 3px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--paletteCoffee);
+    margin-left: 15px;
+    width: 80%;
+}
+
+.arrow-icon {
+    display: inline-block;
+    margin-left: 5px; /* Adjust spacing as needed */
+    transition: transform 0.3s ease-in-out; /* Add transition for smooth rotation */
+}
+
+.collapsed #collapseIcon {
+    transform: rotate(-180deg); /* Rotate arrow icon when collapsed */
+}
+
+.container {
+    margin-left: 250px;
+    z-index: 0;
+}
+
