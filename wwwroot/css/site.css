@@ -1,10 +1,25 @@
+/*:root {
+    --palettePurple: #430A5D;
+    --paletteBrown: #5F374B;
+    --paletteCoffee: #8C6A5D;
+    --paletteVintage: #EEE4B1;
+}*/
+
+:root {
+    --palette1: #22223b;
+    --palette2: #4a4e69;
+    --palette3: #9a8c98;
+    --palette4: #c9ada7;
+    --palette5: #f2e9e4;
+}
+
 html {
   font-size: 14px;
 }
 
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
+    font-size: 18px;
   }
 }
 
@@ -19,6 +34,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: antiquewhite;
 }
 
 .user-menu {
@@ -26,13 +42,81 @@ body {
 }
 
 .dropdown-userMenu {
-    display: none; /* Initially hide the dropdown menu */
-    position: absolute; /* Position the dropdown absolutely relative to the user-menu */
-    top: 100%; /* Position the dropdown below the user-menu */
-    left: 0; /* Align the dropdown with the left edge of the user-menu */
-    /* Add dropdown menu styles */
+    display: none; 
+    position: absolute; 
+    top: 100%; 
+    left: 0;
+    padding-left: 0;
+    background-color: var(--palette1);
 }
+
+.dropdown-userMenu .dropdown-item {
+    color: var(--palette5);
+    margin-right: 50px;
+}
+
+.dropdown-userMenu .dropdown-item:hover {
+    background-color: var(--palette5);
+    /*border-radius: 10px;*/
+    color: var(--palette1);
+}
+
+
+#userDropdown {
+    text-decoration: none;
+}
+
 
 .dropdown-userMenu.show {
     display: block; /* Show the dropdown menu when 'show' class is applied */
 }
+
+.mini-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--palette5);
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.username {
+    margin-left: 10px;
+    font-weight: bold;
+    color: var(--palette5);
+}
+
+.navbar {
+    background-color: var(--palette1) !important;
+    z-index: 9;
+    height: 3.5em;
+    padding: 20px 0;
+}
+
+.navbar-brand-container {
+    padding-left: 0.6%;
+}
+
+.navbar-brand {
+    color: var(--palette5) !important;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.navbar .nav-link {
+    color: var(--palette1) !important;
+    font-weight: bold;
+    border-radius: 10px;
+    width: 5em;
+    text-align: center;
+    border: 1px solid var(--palette3);
+    margin-left: 10px;
+    background-color: var(--palette5);
+}
+
+.navbar .nav-link:hover {
+    background-color: var(--palette2) !important;
+    color: var(--palette5) !important;
+    border-radius: 10px;
+}
+

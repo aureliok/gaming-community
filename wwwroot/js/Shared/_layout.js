@@ -28,12 +28,15 @@ function toggleMenu() {
 }
 ;
 function closeMenu(e) {
+    if (!dropdownMenu) {
+        return;
+    }
     if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
         dropdownMenu.classList.remove("show");
     }
 }
 ;
-logoutBtn.addEventListener("click", logoutUser);
-dropdownToggle.addEventListener("click", toggleMenu);
+logoutBtn === null || logoutBtn === void 0 ? void 0 : logoutBtn.addEventListener("click", logoutUser);
+dropdownToggle === null || dropdownToggle === void 0 ? void 0 : dropdownToggle.addEventListener("click", toggleMenu);
 document.addEventListener("click", function (e) { return closeMenu(e); });
 //# sourceMappingURL=_layout.js.map

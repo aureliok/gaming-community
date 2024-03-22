@@ -13,6 +13,7 @@ using System.Text;
 string issuer = "myself";
 string audience = "someone";
 string secretKey = "your_secret_key_gaming_community";
+string mongoConnectionString = Environment.GetEnvironmentVariable("MONGODB_CONN_STRING");
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

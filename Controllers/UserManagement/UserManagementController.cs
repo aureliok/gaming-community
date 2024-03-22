@@ -23,6 +23,8 @@ namespace GamingCommunity.Controllers.UserManagement
             return userId;
         }
 
+
+        [HttpPost]
         public async Task<IActionResult> ChangeEmailRoute([FromBody] string newEmail)
         {
             int userId = GetUserIdFromClaim();
@@ -67,5 +69,6 @@ namespace GamingCommunity.Controllers.UserManagement
                 return BadRequest($"Failed to change username: {ex.Message}");
             }
         }
+ 
     }
 }

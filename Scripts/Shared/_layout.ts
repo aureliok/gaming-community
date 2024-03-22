@@ -28,12 +28,15 @@ function toggleMenu(): void {
 
 
 function closeMenu(e): void {
+    if (!dropdownMenu) {
+        return;
+    }
     if (!dropdownToggle.contains(e.target as Node) && !dropdownMenu.contains(e.target as Node)) {
         dropdownMenu.classList.remove("show");
     }
 };
 
-
-logoutBtn.addEventListener("click", logoutUser);
-dropdownToggle.addEventListener("click", toggleMenu);
+ 
+logoutBtn?.addEventListener("click", logoutUser);
+dropdownToggle?.addEventListener("click", toggleMenu);
 document.addEventListener("click", (e) => closeMenu(e));

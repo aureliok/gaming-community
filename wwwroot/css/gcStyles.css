@@ -1,0 +1,192 @@
+﻿/*:root {
+    --palettePurple: #22223b;
+    --paletteBrown: #5F374B;
+    --paletteCoffee: #8C6A5D;
+    --paletteVintage: #EEE4B1;
+}
+*/
+
+/*https://coolors.co/palette/22223b-4a4e69-9a8c98-c9ada7-f2e9e4*/
+:root {
+    --palette1: #22223b;
+    --palette2: #4a4e69;
+    --palette3: #9a8c98;
+    --palette4: #c9ada7;
+    --palette5: #f2e9e4;
+}
+
+.carousel-img {
+    border-radius: 10px;
+}
+
+.newsTitle {
+    font-size: 3.4em;
+}
+
+.newsSubtitle, .newsTitle {
+    color: white;
+    margin-bottom: 5%;
+    text-shadow: 
+            -1px -1px 0 black, 
+             1px -1px 0 black, 
+            -1px  1px 0 black, 
+             1px  1px 0 black;
+}
+
+
+/*main.cshtml*/
+.sidebar {
+    height: 100%;
+    width: 230px; /* Adjust as needed */
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 2%;
+    z-index: 1;
+    background-color: var(--palette1); /* Sidebar background color */
+    padding-top: 60px; /* Space for the top navbar */
+    overflow-x: hidden;
+}
+
+
+.sidebar a {
+    padding: 10px;
+    margin-left: 20px;
+    margin-right: 25px;
+    text-decoration: none;
+    font-size: 19px;
+    color: var(--palette5); /* Link color */
+    display: block;
+    border-radius: 10px;
+}
+
+.sidebar a:hover {
+    background-color: var(--palette5); /* Hover color */
+    border-radius: 10px;
+    color: var(--palette1);
+}
+
+.division {
+    margin-top: 3px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--palette3);
+    margin-left: 15px;
+    width: 80%;
+}
+
+.arrow-icon {
+    display: inline-block;
+    margin-left: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.collapsed #collapseIcon {
+    transform: rotate(-180deg);
+}
+
+.toggleBtn {
+    border: none;
+    background-color: var(--palette1);
+    color: var(--palette5);
+    padding-left: 15px;
+}
+
+.container {
+    margin-left: 13%;
+    z-index: 0;
+    overflow-x: hidden;
+}
+
+
+/*Login.cshtml*/
+.container, container-fluid {
+    min-height: 85vh;
+}
+
+
+/*YourProfile.cshtml*/
+.profileAvatar {
+    height: 200px;
+    width: auto;
+}
+
+
+.profileBio {
+    width: 100%;
+    overflow-wrap: break-word;
+}
+
+.profileBioText {
+    overflow-wrap: break-word;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+#loginContainer,  #signUpContainer {
+    margin-top: 1em;
+    margin-left: 3em;
+}
+
+
+.forms input {
+    width: 35%;
+    border-radius: 5px;
+}
+
+.forms input:focus {
+    outline: 2px solid var(--palette1);
+}
+
+.forms span {
+    font-style: oblique;
+}
+
+.passwordContainer, #birthDate {
+    margin-bottom: 1.3em;
+}
+
+#loginBtn, #signUpBtn, #submitBtn {
+    width: 10%;
+    border-radius: 10px;
+    border: 2px solid var(--palette1);
+    background-color: var(--palette5);
+    color: var(--palette1);
+    font-weight: bold;
+}
+
+#loginBtn:hover, #signUpBtn:hover, #submitBtn:hover {
+    background-color: var(--palette1);
+    color: var(--palette5);
+}
+
+.profileInfo {
+    margin-top: 1.2em;
+}
+
+.profileMenu button {
+    width: 100%;
+    height: auto;
+    margin-bottom: .5em;
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: var(--palette1);
+    color: var(--palette5);
+}
+
+.profileMenu button:hover {
+    background-color: var(--palette5);
+    color: var(--palette1);
+}
+
+.profileActivityContainer {
+    margin-top: .5em;
+    height: 60vh;
+    border-radius: 10px;
+    border-top: 1px solid var(--palette1);
+    border-left: 1px solid var(--palette1);
+    background-color: #e5e5e5;
+}
+
+.profileActivity h5 {
+    text-decoration: underline;
+}

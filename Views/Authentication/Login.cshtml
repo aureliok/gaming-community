@@ -8,16 +8,17 @@
 }
 
 
-<div class="container">
-    <h2>Login</h2>
-    <form id="loginForm">
+<div class="container" id="loginContainer">
+    <h2>_Login</h2>
+    <form id="loginForm" class="forms">
         <div>
             <label for="username">Username or Email:</label>
-            <input type="text" id="usernameOrEmail" name="usernameOrEmail" />
+            <input type="text" class="form-control" id="usernameOrEmail" name="usernameOrEmail" />
         </div>
-        <div>
+        <div class="passwordContainer">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" />
+            <input type="password" class="form-control" id="password" name="password" />
+            <a class="forgotPasswordLink" href="#">I forgot my password</a>
         </div>
         <button type="submit" id="loginBtn">Login</button>
         <button type="button" id="signUpBtn">Sign Up</button>
