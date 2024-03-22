@@ -6,47 +6,58 @@
     ViewData["Title"] = "Profile";
 }
 
-<div class="container">
+<div class="profilePageContainer">
     <div class="profileContainer">
-        <div class="profileAvatarUsername">
-            <img src="" alt="your avatar" id="profileAvatar"/>
-            <p class="profileName">Username</p>
-        </div>
-        <div class="profileInfo">
-            <p class="profileGender">gender</p>
-            <p class="profileAge">age</p>
-        </div>
-
-        <div class="profileBio">
-            <p class="profileBioText">bio</p>
+        <div class="profileAvatarBio row">
+            <div class="col-auto">
+                <img src="~/imgs/user_avatars/conker.jpg" alt="your avatar" class="profileAvatar" id="profileAvatar" />
+            </div>
+            <div class="col">
+                <div class="profileBio">
+                    <p class="profileBioText">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+                </div>
+            </div>
         </div>
 
-        <div class="profilePlatform">
-            <p class="profilePlatformLink"><a href="https://www.google.com">google</a></p>
+        <div class="row">
+            <div class="col-2">
+                <div class="profileInfo">
+                    <p class="profileUsername"><strong>Username</strong></p>
+                    <p class="profileGender"><strong>Gender</strong></p>
+                    <p class="profileAge"><strong>Age</strong></p>
+                </div>
+
+                <div class="profilePlatform">
+                    <p class="profilePlatformLink"><a href="https://www.google.com"> google</a></p>
+                </div>
+                <div class="profileMenu">
+                    <div class="myActivities">
+                        <button type="button" class="button">My activities</button>
+                    </div>
+                    <div class="seeDirectMessages">
+                        <button type="button" class="button">Direct messages</button>
+                    </div>
+                    <div class="changePassword">
+                        <button type="button" class="button">Change password</button>
+                    </div>
+                    <div class="changeEmail">
+                        <button type="button" class="button">Change email</button>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="profileActivityContainer col-10">
+                <div class="profileActivity">
+                    <h5>My Activities</h5>
+                </div>
+            </div>
+            
         </div>
     </div>
 
-    <div class="profileMenu">
-        <div class="userOptions">
-            <button type="button" class="button">My activies</button>
-        </div>
-        <div class="seeDirectMessages">
-            <button type="button" class="button">Direct messages</button>
-        </div>
-        <div class="changeUsername">
-            <button type="button" class="button">Change your username</button>
-        </div>
-        <div class="changePassword">
-            <button type="button" class="button">Change your password</button>
-        </div>
-        <div class="changeEmail">
-            <button type="button" class="button">Change your email</button>
-        </div>
-    </div>
 
-    <div class="profileActivity">
-        Under construction!
-    </div>
+   
 
 
 </div>

@@ -1,8 +1,16 @@
-:root {
+/*:root {
     --palettePurple: #430A5D;
     --paletteBrown: #5F374B;
     --paletteCoffee: #8C6A5D;
     --paletteVintage: #EEE4B1;
+}*/
+
+:root {
+    --palette1: #22223b;
+    --palette2: #4a4e69;
+    --palette3: #9a8c98;
+    --palette4: #c9ada7;
+    --palette5: #f2e9e4;
 }
 
 html {
@@ -38,7 +46,26 @@ body {
     position: absolute; 
     top: 100%; 
     left: 0;
+    padding-left: 0;
+    background-color: var(--palette1);
 }
+
+.dropdown-userMenu .dropdown-item {
+    color: var(--palette5);
+    margin-right: 50px;
+}
+
+.dropdown-userMenu .dropdown-item:hover {
+    background-color: var(--palette5);
+    /*border-radius: 10px;*/
+    color: var(--palette1);
+}
+
+
+#userDropdown {
+    text-decoration: none;
+}
+
 
 .dropdown-userMenu.show {
     display: block; /* Show the dropdown menu when 'show' class is applied */
@@ -48,7 +75,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid var(--paletteVintage);
+    border: 2px solid var(--palette5);
     padding: 0 !important;
     margin: 0 !important;
 }
@@ -56,28 +83,40 @@ body {
 .username {
     margin-left: 10px;
     font-weight: bold;
-    color: var(--paletteVintage);
+    color: var(--palette5);
 }
 
 .navbar {
-    background-color: var(--palettePurple) !important;
+    background-color: var(--palette1) !important;
     z-index: 9;
+    height: 3.5em;
+    padding: 20px 0;
 }
 
 .navbar-brand-container {
-    padding-left: 2%;
+    padding-left: 0.6%;
 }
 
 .navbar-brand {
-    color: var(--paletteVintage) !important;
+    color: var(--palette5) !important;
     font-weight: bold;
     font-size: 30px;
 }
 
 .navbar .nav-link {
-    color: var(--paletteVintage) !important;
+    color: var(--palette1) !important;
     font-weight: bold;
-    padding-top: 10px !important;
-    padding-bottom: 0 !important;
+    border-radius: 10px;
+    width: 5em;
+    text-align: center;
+    border: 1px solid var(--palette3);
+    margin-left: 10px;
+    background-color: var(--palette5);
+}
+
+.navbar .nav-link:hover {
+    background-color: var(--palette2) !important;
+    color: var(--palette5) !important;
+    border-radius: 10px;
 }
 
