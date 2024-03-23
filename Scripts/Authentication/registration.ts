@@ -1,4 +1,6 @@
-﻿const registrationForm = <HTMLFormElement>document.getElementById("registrationForm");
+﻿import { checkPassword, checkIfPasswordEqual, checkEmailInput } from "../Helpers/validators.js";
+
+const registrationForm = <HTMLFormElement>document.getElementById("registrationForm");
 const usernameInput = <HTMLInputElement>document.getElementById("username");
 const emailInput = <HTMLInputElement>document.getElementById("email");
 const passwordInput = <HTMLInputElement>document.getElementById("password");
@@ -9,9 +11,6 @@ const emailAvailability = <HTMLSpanElement>document.getElementById("emailAvailab
 const strongPassword = <HTMLSpanElement>document.getElementById("validPassword");
 const passwordEquality = <HTMLSpanElement>document.getElementById("confirmPasswordEqual");
 const birthDateWarning = <HTMLSpanElement>document.getElementById("birthDateWarning");
-
-const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 let validUser: boolean = false;
 let validEmail: boolean = false;
@@ -43,66 +42,6 @@ async function checkUsernameAvailability(): Promise<void> {
     }
 }
 
-
-function isEmail(input: string): boolean {
-    return emailRegex.test(input);
-}
-
-
-async function checkEmailInput(): Promise<void> {
-    const email = emailInput.value;
-
-    if (!isEmail(email)) {
-        validEmail = false;
-        emailAvailability.innerText = "Not a valid email";
-        return;
-    }
-
-    const response = await fetch("/CheckIfEmailExists", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(email)
-    });
-
-    if (response.ok) {
-        console.log("email does exist");
-        emailAvailability.innerText = "Email is already registered to another user account."
-        validEmail = false;
-    } else if (response.status == 404) {
-        console.log("email does not exist");
-        emailAvailability.innerText = "Email is available."
-        validEmail = true;
-    } else {
-        console.log("failed to check");
-    }
-}
-
-function checkPassword(): void {
-    const password = passwordInput.value;
-
-    if (passwordRegex.test(password)) {
-        validPassword = true;
-        strongPassword.innerText = "Password is valid.";
-    } else {
-        validPassword = true;
-        strongPassword.innerText = "Your Password must have 8 digits and contain at least one digit and at least one of lowercase, uppercase and special characters.";
-    }
-}
-
-
-function checkIfPasswordEqual(): void {
-    const passwordInput = <HTMLInputElement>document.getElementById("password");
-
-    if (passwordInput.value != confirmPasswordInput.value) {
-        passwordEquality.innerText = "Passwords does not match";
-        equalPassword = false;
-    } else {
-        passwordEquality.innerText = "Password OK";
-        equalPassword = true;
-    }
-}
 
 
 function checkBirthDateValid(): void {
@@ -180,13 +119,18 @@ async function registerNewUser(): Promise<void> {
 }
 
 
-
-
-
 usernameInput.addEventListener("input", checkUsernameAvailability);
-emailInput.addEventListener("input", checkEmailInput);
-passwordInput.addEventListener("input", checkPassword);
-confirmPasswordInput.addEventListener("input", checkIfPasswordEqual);
+emailInput.addEventListener("input", async () => {
+    validEmail = await checkEmailInput(emailInput, emailAvailability);
+});
+passwordInput.addEventListener("input", async () => {
+    validPassword = await checkPassword(passwordInput, strongPassword);
+});
+confirmPasswordInput.addEventListener("input", async () => {
+    equalPassword = await checkIfPasswordEqual(passwordInput,
+                         confirmPasswordInput,
+                         passwordEquality);
+});
 birthDateInput.addEventListener("input", checkBirthDateValid);
 
 registrationForm.addEventListener("submit", function (e) {

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Database\" />
+    <Folder Include="Scripts\Helpers\" />
     <Folder Include="wwwroot\js\Authentication\" />
     <Folder Include="wwwroot\js\Shared\" />
   </ItemGroup>

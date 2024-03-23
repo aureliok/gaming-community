@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+import { checkPassword, checkIfPasswordEqual, checkEmailInput } from "../Helpers/validators.js";
 var registrationForm = document.getElementById("registrationForm");
 var usernameInput = document.getElementById("username");
 var emailInput = document.getElementById("email");
@@ -46,8 +46,6 @@ var emailAvailability = document.getElementById("emailAvailability");
 var strongPassword = document.getElementById("validPassword");
 var passwordEquality = document.getElementById("confirmPasswordEqual");
 var birthDateWarning = document.getElementById("birthDateWarning");
-var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 var validUser = false;
 var validEmail = false;
 var validPassword = false;
@@ -87,70 +85,6 @@ function checkUsernameAvailability() {
             }
         });
     });
-}
-function isEmail(input) {
-    return emailRegex.test(input);
-}
-function checkEmailInput() {
-    return __awaiter(this, void 0, void 0, function () {
-        var email, response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    email = emailInput.value;
-                    if (!isEmail(email)) {
-                        validEmail = false;
-                        emailAvailability.innerText = "Not a valid email";
-                        return [2 /*return*/];
-                    }
-                    return [4 /*yield*/, fetch("/CheckIfEmailExists", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(email)
-                        })];
-                case 1:
-                    response = _a.sent();
-                    if (response.ok) {
-                        console.log("email does exist");
-                        emailAvailability.innerText = "Email is already registered to another user account.";
-                        validEmail = false;
-                    }
-                    else if (response.status == 404) {
-                        console.log("email does not exist");
-                        emailAvailability.innerText = "Email is available.";
-                        validEmail = true;
-                    }
-                    else {
-                        console.log("failed to check");
-                    }
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-function checkPassword() {
-    var password = passwordInput.value;
-    if (passwordRegex.test(password)) {
-        validPassword = true;
-        strongPassword.innerText = "Password is valid.";
-    }
-    else {
-        validPassword = true;
-        strongPassword.innerText = "Your Password must have 8 digits and contain at least one digit and at least one of lowercase, uppercase and special characters.";
-    }
-}
-function checkIfPasswordEqual() {
-    var passwordInput = document.getElementById("password");
-    if (passwordInput.value != confirmPasswordInput.value) {
-        passwordEquality.innerText = "Passwords does not match";
-        equalPassword = false;
-    }
-    else {
-        passwordEquality.innerText = "Password OK";
-        equalPassword = true;
-    }
 }
 function checkBirthDateValid() {
     var birthDate = new Date(birthDateInput.value);
@@ -243,9 +177,36 @@ function registerNewUser() {
     });
 }
 usernameInput.addEventListener("input", checkUsernameAvailability);
-emailInput.addEventListener("input", checkEmailInput);
-passwordInput.addEventListener("input", checkPassword);
-confirmPasswordInput.addEventListener("input", checkIfPasswordEqual);
+emailInput.addEventListener("input", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, checkEmailInput(emailInput, emailAvailability)];
+            case 1:
+                validEmail = _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
+passwordInput.addEventListener("input", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, checkPassword(passwordInput, strongPassword)];
+            case 1:
+                validPassword = _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
+confirmPasswordInput.addEventListener("input", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, checkIfPasswordEqual(passwordInput, confirmPasswordInput, passwordEquality)];
+            case 1:
+                equalPassword = _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
 birthDateInput.addEventListener("input", checkBirthDateValid);
 registrationForm.addEventListener("submit", function (e) {
     e.preventDefault();

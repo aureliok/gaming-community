@@ -25,6 +25,18 @@ namespace GamingCommunity.Services.Implementations
             return null;
         }
 
+        public async Task<User> AuthenticateAsync(int userId, string password)
+        {
+            User user = await _userRepository.GetByIdAsync(userId);
+
+            if (user != null && VerifyPassword(password, user.PasswordHash))
+            {
+                return user;
+            }
+
+            return null;
+        }
+
         public bool VerifyPassword(string password, string hash) => BCrypt.Net.BCrypt.Verify(password, hash);
     }
 }
