@@ -1,17 +1,27 @@
 ﻿using GamingCommunity.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Security;
+using GamingCommunity.Entities;
+using GamingCommunity.Repositories.Interfaces;
 
 namespace GamingCommunity.Controllers.UserManagement
 {
     public class UserManagementController : Controller
     {
         private readonly IUserManagementService _userManagementService;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserProfileRepository _profileRepository;
+        private readonly IAuthenticationService _authenticationService;
 
-        public UserManagementController(IUserManagementService userManagementService)
+        public UserManagementController(IUserManagementService userManagementService, 
+                                        IUserRepository userRepository,
+                                        IUserProfileRepository profileRepository,
+                                        IAuthenticationService authenticationService)
         {
             _userManagementService = userManagementService;
+            _userRepository = userRepository;
+            _profileRepository = profileRepository;
+            _authenticationService = authenticationService;
         }
 
         public int GetUserIdFromClaim()
@@ -23,8 +33,38 @@ namespace GamingCommunity.Controllers.UserManagement
             return userId;
         }
 
+        [HttpGet]
+        [Route("GetUserData")]
+        public async Task<IActionResult> GetUserData()
+        {
+            //int userId? = GetUserIdFromClaim();
+            int? userId = 1;
+
+            if (userId == null)
+            {
+                return NotFound();
+            } 
+            else 
+            {
+                User user = await _userRepository.GetByIdAsync(1);
+                UserProfile profile = await _profileRepository.GetByIdAsync(1);
+
+                return Json(new
+                {
+                    username = user.Username,
+                    email = user.Email,
+                    gender = profile.Gender,
+                    birthDate = profile.BirthDate,
+                    platformLink = profile.GamingPlatformLink,
+                    bio = profile.Bio
+                });
+            }
+        }
+
+
 
         [HttpPost]
+        [Route("ChangeEmail")]
         public async Task<IActionResult> ChangeEmailRoute([FromBody] string newEmail)
         {
             int userId = GetUserIdFromClaim();
@@ -40,6 +80,25 @@ namespace GamingCommunity.Controllers.UserManagement
             }
         }
 
+        [HttpPost]
+        [Route("CheckCurrentPassword")]
+        public async Task<IActionResult> CheckCurrentPassword([FromBody] string currPassword)
+        {
+            int userId = GetUserIdFromClaim();
+
+            User user = await _authenticationService.AuthenticateAsync(userId, currPassword);
+
+            if (user == null)
+            {
+                return NotFound();
+            } else
+            {
+                return Ok();
+            }
+        }
+
+        [HttpPatch]
+        [Route("ChangePassword")]
         public async Task<IActionResult> ChangePasswordRoute([FromBody] string newPassword)
         {
             int userId = GetUserIdFromClaim();
@@ -51,7 +110,7 @@ namespace GamingCommunity.Controllers.UserManagement
             }
             catch (Exception ex)
             {
-                return BadRequest($"Failed to change email: {ex.Message}");
+                return BadRequest($"Failed to change password: {ex.Message}");
             }
         }
 

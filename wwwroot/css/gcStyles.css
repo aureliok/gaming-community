@@ -145,7 +145,7 @@
     margin-bottom: 1.3em;
 }
 
-#loginBtn, #signUpBtn, #submitBtn {
+#loginBtn, #signUpBtn, #submitBtn, .submitBtn {
     width: 10%;
     border-radius: 10px;
     border: 2px solid var(--palette1);
@@ -154,7 +154,12 @@
     font-weight: bold;
 }
 
-#loginBtn:hover, #signUpBtn:hover, #submitBtn:hover {
+.submitBtn {
+    margin-top: 10px;
+}
+
+
+#loginBtn:hover, #signUpBtn:hover, #submitBtn:hover, .submitBtn:hover {
     background-color: var(--palette1);
     color: var(--palette5);
 }
@@ -178,7 +183,7 @@
     color: var(--palette1);
 }
 
-.profileActivityContainer {
+.profileWindowContainer {
     margin-top: .5em;
     height: 60vh;
     border-radius: 10px;
@@ -187,6 +192,6 @@
     background-color: #e5e5e5;
 }
 
-.profileActivity h5 {
+.profileWindow h5 {
     text-decoration: underline;
 }

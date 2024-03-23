@@ -14,7 +14,7 @@
             </div>
             <div class="col">
                 <div class="profileBio">
-                    <p class="profileBioText">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+                    <p id="profileBioText">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
                 </div>
             </div>
         </div>
@@ -28,36 +28,35 @@
                 </div>
 
                 <div class="profilePlatform">
-                    <p><a id="profilePlatformLink" href="https://www.google.com" target="_blank">google</a></p>
+                    <p id="profilePlatformLink"><a href="https://www.google.com" target="_blank">google</a></p>
                 </div>
                 <div class="profileMenu">
                     <div class="myActivities">
-                        <button type="button" class="button">My activities</button>
+                        <button type="button" id="myActivitiesBtn" class="button">My activities</button>
                     </div>
                     <div class="seeDirectMessages">
-                        <button type="button" class="button">Direct messages</button>
+                        <button type="button" id="seeDMBtn" class="button">Direct messages</button>
                     </div>
                     <div class="changePassword">
-                        <button type="button" class="button">Change password</button>
+                        <button type="button" id="changePasswordBtn" class="button">Change password</button>
                     </div>
                     <div class="changeEmail">
-                        <button type="button" class="button">Change email</button>
+                        <button type="button" id="changeEmailBtn" class="button">Change email</button>
                     </div>
                 </div>
             </div>
 
             
-            <div class="profileActivityContainer col-10">
-                <div class="profileActivity">
+            <div class="profileWindowContainer col-10">
+                <div class="profileWindow">
                     <h5>My Activities</h5>
                 </div>
             </div>
             
         </div>
     </div>
-
-
-   
-
-
 </div>
+
+@section Scripts {
+    <script type="module" src="~/js/Profile/profile.js"></script>
+}
