@@ -17,29 +17,29 @@ INSERT INTO community_data.users (username, email, password_hash, level_id) VALU
 
 
 INSERT INTO community_data.threads (title, content, created_at, user_id) VALUES
-    ('Thread 1', 'Content for thread 1', CURRENT_TIMESTAMP, 1)
-    ,('Thread 2', 'Content for thread 2', CURRENT_TIMESTAMP, 2)
-    ,('Thread 3', 'Content for thread 3', CURRENT_TIMESTAMP, 3)
-    ,('Thread 4', 'Content for thread 4', CURRENT_TIMESTAMP, 4)
-    ,('Thread 5', 'Content for thread 5', CURRENT_TIMESTAMP, 5)
-    ,('Thread 6', 'Content for thread 6', CURRENT_TIMESTAMP, 1)
-    ,('Thread 7', 'Content for thread 7', CURRENT_TIMESTAMP, 2)
-    ,('Thread 8', 'Content for thread 8', CURRENT_TIMESTAMP, 3)
-    ,('Thread 9', 'Content for thread 9', CURRENT_TIMESTAMP, 4)
-    ,('Thread 10', 'Content for thread 10', CURRENT_TIMESTAMP, 5);
+    ('Thread 1', 'Content for thread 1', CURRENT_TIMESTAMP - INTERVAL '1 hour', 1)
+    ,('Thread 2', 'Content for thread 2', CURRENT_TIMESTAMP - INTERVAL '4 hours', 2)
+    ,('Thread 3', 'Content for thread 3', CURRENT_TIMESTAMP - INTERVAL '2 hours', 3)
+    ,('Thread 4', 'Content for thread 4', CURRENT_TIMESTAMP - INTERVAL '4 hours', 4)
+    ,('Thread 5', 'Content for thread 5', CURRENT_TIMESTAMP - INTERVAL '12 hours', 5)
+    ,('Thread 6', 'Content for thread 6', CURRENT_TIMESTAMP - INTERVAL '6 hours', 1)
+    ,('Thread 7', 'Content for thread 7', CURRENT_TIMESTAMP - INTERVAL '7 hours', 2)
+    ,('Thread 8', 'Content for thread 8', CURRENT_TIMESTAMP - INTERVAL '20 hours', 3)
+    ,('Thread 9', 'Content for thread 9', CURRENT_TIMESTAMP - INTERVAL '9 hours', 4)
+    ,('Thread 10', 'Content for thread 10', CURRENT_TIMESTAMP - INTERVAL '10 hours', 5);
 
 
 INSERT INTO community_data.comments (content, created_at, user_id, thread_id) VALUES
-    ('Comment 1', CURRENT_TIMESTAMP, 2, 1)
-    ,('Comment 2', CURRENT_TIMESTAMP, 10, 2)
-    ,('Comment 3', CURRENT_TIMESTAMP, 3, 3)
-    ,('Comment 4', CURRENT_TIMESTAMP, 4, 7)
-    ,('Comment 5', CURRENT_TIMESTAMP, 6, 5)
-    ,('Comment 6', CURRENT_TIMESTAMP, 1, 1)
-    ,('Comment 7', CURRENT_TIMESTAMP, 7, 10)
-    ,('Comment 8', CURRENT_TIMESTAMP, 3, 2)
-    ,('Comment 9', CURRENT_TIMESTAMP, 9, 4)
-    ,('Comment 10', CURRENT_TIMESTAMP, 5, 2);
+    ('Comment 1', CURRENT_TIMESTAMP - INTERVAL '2 hours', 2, 1)
+    ,('Comment 2', CURRENT_TIMESTAMP - INTERVAL '4 hours', 10, 2)
+    ,('Comment 3', CURRENT_TIMESTAMP - INTERVAL '6 hours', 3, 3)
+    ,('Comment 4', CURRENT_TIMESTAMP - INTERVAL '1 hour', 4, 7)
+    ,('Comment 5', CURRENT_TIMESTAMP - INTERVAL '8 hours', 6, 5)
+    ,('Comment 6', CURRENT_TIMESTAMP - INTERVAL '4 hours', 1, 1)
+    ,('Comment 7', CURRENT_TIMESTAMP - INTERVAL '5 hours', 7, 10)
+    ,('Comment 8', CURRENT_TIMESTAMP - INTERVAL '12 hours', 3, 2)
+    ,('Comment 9', CURRENT_TIMESTAMP - INTERVAL '3 hours', 9, 4)
+    ,('Comment 10', CURRENT_TIMESTAMP - INTERVAL '10 hours', 5, 2);
 
 
 INSERT INTO community_data.votes (vote_type, user_id, thread_id, comment_id) VALUES
@@ -143,17 +143,17 @@ INSERT INTO community_data.games (title, release_date, genre_id, platform_id, de
     ,('Call of Duty: Warzone', '2020-03-10', 1, 2, 1, 1, 5, '507f1f77bcf86cd799439020');
 
 
-INSERT INTO community_data.game_reviews (game_id, user_id, score, review_text) VALUES
-    (1, 1, 5, 'Absolutely loved this game, one of the best RPGs ever!')
-    ,(2, 2, 4, 'A fantastic open-world game with breathtaking visuals.')
-    ,(3, 3, 5, 'GTA V offers an immersive experience with its diverse gameplay.')
-    ,(4, 4, 5, 'An epic Western adventure with an engrossing story.')
-    ,(5, 5, 5, 'The remake captures the essence of the original while adding new elements.')
-    ,(6, 6, 4, 'A masterpiece in storytelling, but the gameplay could be improved.')
-    ,(7, 7, 5, 'A charming and relaxing game, perfect for unwinding.')
-    ,(8, 8, 3, 'Fortnite is fun, but the constant updates can be overwhelming.')
-    ,(9, 9, 5, 'Minecraft offers endless creativity and exploration.')
-    ,(10, 10, 4, 'Warzone delivers intense multiplayer action, but suffers from cheaters.');
+INSERT INTO community_data.game_reviews (game_id, user_id, score, review_text, created_at) VALUES
+    (1, 1, 5, 'Absolutely loved this game, one of the best RPGs ever!', CURRENT_TIMESTAMP - INTERVAL '1 hour')
+    ,(2, 2, 4, 'A fantastic open-world game with breathtaking visuals.', CURRENT_TIMESTAMP - INTERVAL '5 hours')
+    ,(3, 3, 5, 'GTA V offers an immersive experience with its diverse gameplay.', CURRENT_TIMESTAMP - INTERVAL '7 hours')
+    ,(4, 4, 5, 'An epic Western adventure with an engrossing story.', CURRENT_TIMESTAMP - INTERVAL '2 hours')
+    ,(5, 5, 5, 'The remake captures the essence of the original while adding new elements.', CURRENT_TIMESTAMP - INTERVAL '12 hours')
+    ,(6, 6, 4, 'A masterpiece in storytelling, but the gameplay could be improved.', CURRENT_TIMESTAMP - INTERVAL '14 hours')
+    ,(7, 7, 5, 'A charming and relaxing game, perfect for unwinding.', CURRENT_TIMESTAMP - INTERVAL '20 hours')
+    ,(8, 8, 3, 'Fortnite is fun, but the constant updates can be overwhelming.', CURRENT_TIMESTAMP - INTERVAL '3 hours')
+    ,(9, 9, 5, 'Minecraft offers endless creativity and exploration.', CURRENT_TIMESTAMP - INTERVAL '4 hours')
+    ,(10, 10, 4, 'Warzone delivers intense multiplayer action, but suffers from cheaters.', CURRENT_TIMESTAMP - INTERVAL '5 hours');
 
 
 INSERT INTO community_data.user_connections (user_id, friend_id, connection_type, connection_start, connection_end) VALUES

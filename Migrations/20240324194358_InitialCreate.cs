@@ -189,7 +189,8 @@ namespace GamingCommunity.Migrations
                     game_id = table.Column<int>(type: "integer", nullable: false),
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     score = table.Column<int>(type: "integer", nullable: false),
-                    review_text = table.Column<string>(type: "text", nullable: true)
+                    review_text = table.Column<string>(type: "text", nullable: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,0 +1,37 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<GamingCommunity.Models.GamingThreadViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Gaming";
+}
+
+
+<div class="containerTable">
+    <h2 class="mb-3">Gaming Threads</h2>
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="truncate-text">Title</th>
+                <th class="truncate-text">Content</th>
+                <th class="truncate-text">Original Poster </th>
+                <th class="truncate-text">Comments </th>
+                <th class="truncate-text">Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var thread in Model)
+            {
+                <tr>
+                    <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.Title)</td>
+                    <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.Content)</td>
+                    <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.Username)</td>
+                    <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.CommentsCount)</td>
+                    <td class="truncate-text custom-th">@thread.CreatedAt.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

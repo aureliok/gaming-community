@@ -53,33 +53,39 @@
         @{
             if (User.Identity.IsAuthenticated)
             {
-            <button class="toggleBtn" type="button" data-bs-toggle="collapse" data-bs-target="#firstSidebarLinks" aria-expanded="false" aria-controls="collapseExample">
-                firstSidebarLinks
-                <span id="collapseIcon" class="arrow-icon">▲</span>
-            </button>
-            <div class="firstSidbareLinks show" id="firstSidebarLinks">
-            </div>
-            <div class="division">
-            </div>
-            <button class="toggleBtn" type="button" data-bs-toggle="collapse" data-bs-target="#secondSidebarLinks" aria-expanded="false" aria-controls="collapseExample">
-                secondSidebarLinks
-                <span id="collapseIcon" class="arrow-icon">▲</span>
-            </button>
-            <div class="secondSidebarLinks show" id="secondSidebarLinks">
+                <button class="toggleBtn" type="button" data-bs-toggle="collapse" data-bs-target="#firstSidebarLinks" aria-expanded="false" aria-controls="collapseExample">
+                    Community
+                    <span id="collapseIcon" class="arrow-icon">▲</span>
+                </button>
+                <div class="firstSidbareLinks show" id="firstSidebarLinks">
+                    <a class="sidebar-link" asp-controller="Community" asp-action="Gaming">Gaming</a>
+                    <a class="sidebar-link" asp-controller="Community" asp-action="Reviews">Reviews</a>
+                    <a class="sidebar-link" asp-controller="Community" asp-action="News">News</a>
+                </div>
+                <div class="division">
+                </div>
+                <button class="toggleBtn" type="button" data-bs-toggle="collapse" data-bs-target="#secondSidebarLinks" aria-expanded="false" aria-controls="collapseExample">
+                    Last visited
+                    <span id="collapseIcon" class="arrow-icon">▲</span>
+                </button>
+                <div class="secondSidebarLinks show" id="secondSidebarLinks">
+                    <a class="sidebar-link" href="#">Last visited thread</a>
+                    <a class="sidebar-link" href="#">second Last visited thread</a>
+                    <a class="sidebar-link" href="#">third last visited thread</a>
                 </div>
             }
             else
             {
                 <div class="guestLinks">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    <a class="nav-link" asp-area="" asp-controller="Community" asp-action="Main">Community</a>
+                    <a class="nav-link" asp-area="" asp-controller="Community" asp-action="Gaming">Community</a>
                 </div>
             }
          }
     </div>
 
 
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

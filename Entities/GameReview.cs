@@ -11,5 +11,6 @@ namespace GamingCommunity.Entities
         [Range(1,5)]
         public int Score { get; set; }
         public string? ReviewText { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

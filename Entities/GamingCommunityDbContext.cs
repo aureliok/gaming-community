@@ -227,6 +227,7 @@ namespace GamingCommunity.Entities
                 entity.Property(p => p.UserId).HasColumnName("user_id");
                 entity.Property(p => p.Score).HasColumnName("score").IsRequired();
                 entity.Property(p => p.ReviewText).HasColumnName("review_text");
+                entity.Property(p => p.CreatedAt).HasColumnName("created_at");
 
                 entity.HasOne<Game>()
                       .WithOne()

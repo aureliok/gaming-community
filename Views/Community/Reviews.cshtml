@@ -1,0 +1,53 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<GamingCommunity.Models.GameReviewViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Gaming";
+}
+
+<div class="containerTable">
+    <h2 class="mb-3">Gaming Reviews</h2>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="truncate-text">Game</th>
+                    <th class="truncate-text">User</th>
+                    <th class="truncate-text">Review</th>
+                    <th class="truncate-text">Score</th>
+                    <th class="truncate-text">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var thread in Model)
+                {
+                    <tr data-toggle="modal" data-target="#modal-@thread.ReviewId">
+                        <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.ReviewGame)</td>
+                        <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.Username)</td>
+                        <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.ReviewContent)</td>
+                        <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.Score)</td>
+                        <td class="truncate-text custom-th">@thread.CreatedAt.ToString("g")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @foreach (var thread in Model)
+    {
+        <div class="modal fade" id="modal-@thread.ReviewId" tabindex="-1" role="dialog" aria-labelledby="modalLabel-@thread.ReviewId" aria-hidden="true">
+            <h2>@thread.ReviewId</h2>
+            <p>@thread.ReviewContent</p>
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    <script type="module" src="~/js/Community/reviews.js"></script>
+}
+
+

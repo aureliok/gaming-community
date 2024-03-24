@@ -92,15 +92,17 @@
 }
 
 .container {
-    margin-left: 13%;
+    margin-left: 12%;
     z-index: 0;
     overflow-x: hidden;
+    min-height: 85vh;
 }
 
 
 /*Login.cshtml*/
-.container, container-fluid {
+.containerBody {
     min-height: 85vh;
+    padding-left: 12%;
 }
 
 
@@ -194,4 +196,33 @@
 
 .profileWindow h5 {
     text-decoration: underline;
+}
+
+
+/*Reviews/Gaming.cshml*/
+.containerTable {
+    margin-left: 230px;
+    min-height: 85vh;
+}
+
+.wrap-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.custom-th {
+    height: 3rem;
+    align-content: center;
+}
+
+.show {
+    display: block;
 }
