@@ -35,15 +35,29 @@
             </tbody>
         </table>
     </div>
+</div>
 
     @foreach (var thread in Model)
     {
         <div class="modal fade" id="modal-@thread.ReviewId" tabindex="-1" role="dialog" aria-labelledby="modalLabel-@thread.ReviewId" aria-hidden="true">
-            <h2>@thread.ReviewId</h2>
-            <p>@thread.ReviewContent</p>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">@thread.ReviewId @thread.ReviewGame</h5>
+                        <button type="button" id="@thread.ReviewId" class="modalClose" data-dismiss="modal" aria-label="Close">
+                            <span class="modalClose" id="@thread.ReviewId">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>@thread.ReviewContent</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="@thread.ReviewId" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
     }
-</div>
 
 
 @section Scripts {

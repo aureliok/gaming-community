@@ -226,3 +226,7 @@
 .show {
     display: block;
 }
+
+.modal-dialog {
+    width: 85vw;
+}
