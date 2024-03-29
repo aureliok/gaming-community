@@ -187,6 +187,7 @@ namespace GamingCommunity.Migrations
                     review_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     game_id = table.Column<int>(type: "integer", nullable: false),
+                    platform_id = table.Column<int>(type: "integer", nullable: false),
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     score = table.Column<int>(type: "integer", nullable: false),
                     review_text = table.Column<string>(type: "text", nullable: true),
@@ -201,6 +202,13 @@ namespace GamingCommunity.Migrations
                         principalSchema: "community_data",
                         principalTable: "games",
                         principalColumn: "game_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_game_reviews_platforms_platform_id",
+                        column: x => x.platform_id,
+                        principalSchema: "community_data",
+                        principalTable: "platforms",
+                        principalColumn: "platform_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_game_reviews_users_user_id",
@@ -419,15 +427,19 @@ namespace GamingCommunity.Migrations
                 name: "IX_game_reviews_game_id",
                 schema: "community_data",
                 table: "game_reviews",
-                column: "game_id",
-                unique: true);
+                column: "game_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_game_reviews_platform_id",
+                schema: "community_data",
+                table: "game_reviews",
+                column: "platform_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_game_reviews_user_id",
                 schema: "community_data",
                 table: "game_reviews",
-                column: "user_id",
-                unique: true);
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_games_content_rating_id",

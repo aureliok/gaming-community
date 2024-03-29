@@ -7,6 +7,7 @@ namespace GamingCommunity.Entities
     {
         public int ReviewId { get; }
         public int GameId { get; set; }
+        public int PlatformId { get; set; }
         public int UserId { get; set; }
         [Range(1,5)]
         public int Score { get; set; }

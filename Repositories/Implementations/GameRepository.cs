@@ -18,6 +18,13 @@ namespace GamingCommunity.Repositories.Implementations
             return await _context.Games.FirstOrDefaultAsync(x => x.GameId == gameId);
         }
 
+        public async Task<int> GetIdByNameAsync(string gameName)
+        {
+            Game game = await _context.Games.FirstOrDefaultAsync(x => x.Title == gameName);
+
+            return game != null ? game.GameId : -1;
+        }
+
         public async Task<IEnumerable<Game>> GetAllAsync()
         {
             return await _context.Games.ToListAsync();

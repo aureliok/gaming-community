@@ -143,17 +143,17 @@ INSERT INTO community_data.games (title, release_date, genre_id, platform_id, de
     ,('Call of Duty: Warzone', '2020-03-10', 1, 2, 1, 1, 5, '507f1f77bcf86cd799439020');
 
 
-INSERT INTO community_data.game_reviews (game_id, user_id, score, review_text, created_at) VALUES
-    (1, 1, 5, 'Absolutely loved this game, one of the best RPGs ever!', CURRENT_TIMESTAMP - INTERVAL '1 hour')
-    ,(2, 2, 4, 'A fantastic open-world game with breathtaking visuals.', CURRENT_TIMESTAMP - INTERVAL '5 hours')
-    ,(3, 3, 5, 'GTA V offers an immersive experience with its diverse gameplay.', CURRENT_TIMESTAMP - INTERVAL '7 hours')
-    ,(4, 4, 5, 'An epic Western adventure with an engrossing story.', CURRENT_TIMESTAMP - INTERVAL '2 hours')
-    ,(5, 5, 5, 'The remake captures the essence of the original while adding new elements.', CURRENT_TIMESTAMP - INTERVAL '12 hours')
-    ,(6, 6, 4, 'A masterpiece in storytelling, but the gameplay could be improved.', CURRENT_TIMESTAMP - INTERVAL '14 hours')
-    ,(7, 7, 5, 'A charming and relaxing game, perfect for unwinding.', CURRENT_TIMESTAMP - INTERVAL '20 hours')
-    ,(8, 8, 3, 'Fortnite is fun, but the constant updates can be overwhelming.', CURRENT_TIMESTAMP - INTERVAL '3 hours')
-    ,(9, 9, 5, 'Minecraft offers endless creativity and exploration.', CURRENT_TIMESTAMP - INTERVAL '4 hours')
-    ,(10, 10, 4, 'Warzone delivers intense multiplayer action, but suffers from cheaters.', CURRENT_TIMESTAMP - INTERVAL '5 hours');
+INSERT INTO community_data.game_reviews (game_id, platform_id, user_id, score, review_text, created_at) VALUES
+    (1, 1, 1, 5, 'Absolutely loved this game, one of the best RPGs ever!', CURRENT_TIMESTAMP - INTERVAL '1 hour')
+    ,(2, 4, 2, 4, 'A fantastic open-world game with breathtaking visuals.', CURRENT_TIMESTAMP - INTERVAL '5 hours')
+    ,(3, 2, 3, 5, 'GTA V offers an immersive experience with its diverse gameplay.', CURRENT_TIMESTAMP - INTERVAL '7 hours')
+    ,(4, 2, 4, 5, 'An epic Western adventure with an engrossing story.', CURRENT_TIMESTAMP - INTERVAL '2 hours')
+    ,(5, 1, 5, 5, 'The remake captures the essence of the original while adding new elements.', CURRENT_TIMESTAMP - INTERVAL '12 hours')
+    ,(6, 1, 6, 4, 'A masterpiece in storytelling, but the gameplay could be improved.', CURRENT_TIMESTAMP - INTERVAL '14 hours')
+    ,(7, 3, 7, 5, 'A charming and relaxing game, perfect for unwinding.', CURRENT_TIMESTAMP - INTERVAL '20 hours')
+    ,(8, 4, 8, 3, 'Fortnite is fun, but the constant updates can be overwhelming.', CURRENT_TIMESTAMP - INTERVAL '3 hours')
+    ,(9, 1, 9, 5, 'Minecraft offers endless creativity and exploration.', CURRENT_TIMESTAMP - INTERVAL '4 hours')
+    ,(10, 1, 10, 4, 'Warzone delivers intense multiplayer action, but suffers from cheaters.', CURRENT_TIMESTAMP - INTERVAL '5 hours');
 
 
 INSERT INTO community_data.user_connections (user_id, friend_id, connection_type, connection_start, connection_end) VALUES

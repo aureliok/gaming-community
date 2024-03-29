@@ -37,8 +37,7 @@ namespace GamingCommunity.Controllers.UserManagement
         [Route("GetUserData")]
         public async Task<IActionResult> GetUserData()
         {
-            //int userId? = GetUserIdFromClaim();
-            int? userId = 1;
+            int userId = GetUserIdFromClaim();
 
             if (userId == null)
             {
@@ -46,8 +45,8 @@ namespace GamingCommunity.Controllers.UserManagement
             } 
             else 
             {
-                User user = await _userRepository.GetByIdAsync(1);
-                UserProfile profile = await _profileRepository.GetByIdAsync(1);
+                User user = await _userRepository.GetByIdAsync(userId);
+                UserProfile profile = await _profileRepository.GetByIdAsync(userId);
 
                 return Json(new
                 {

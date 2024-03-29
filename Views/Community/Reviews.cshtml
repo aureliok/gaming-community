@@ -8,7 +8,14 @@
 }
 
 <div class="containerTable">
-    <h2 class="mb-3">Gaming Reviews</h2>
+    <div class="row">
+        <div class="col">
+            <h2 class="mb-3">Gaming Reviews</h2>
+        </div>
+        <div class="col-auto">
+            <button type="button" data-toggle="modal" data-target="createNewContent" class="btn btn-primary postNewBtn">New Review</button>
+        </div>
+    </div>
 
     <div class="table-responsive">
         <table class="table table-hover">
@@ -37,27 +44,63 @@
     </div>
 </div>
 
-    @foreach (var thread in Model)
-    {
-        <div class="modal fade" id="modal-@thread.ReviewId" tabindex="-1" role="dialog" aria-labelledby="modalLabel-@thread.ReviewId" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">@thread.ReviewId @thread.ReviewGame</h5>
-                        <button type="button" id="@thread.ReviewId" class="modalClose" data-dismiss="modal" aria-label="Close">
-                            <span class="modalClose" id="@thread.ReviewId">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>@thread.ReviewContent</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="@thread.ReviewId" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>
-                    </div>
+@foreach (var thread in Model)
+{
+    <div class="modal fade" id="modal-@thread.ReviewId" tabindex="-1" role="dialog" aria-labelledby="modalLabel-@thread.ReviewId" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@thread.ReviewId @thread.ReviewGame</h5>
+                    <button type="button" id="@thread.ReviewId" class="modalClose" data-dismiss="modal" aria-label="Close">
+                        <span class="modalClose" id="@thread.ReviewId">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>@thread.ReviewContent</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="@thread.ReviewId" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-    }
+    </div>
+}
+
+<div class="modal fade" id="createNewContent" tabindex="-1" role="dialog" aria-labelledby="modalLabel-newReview" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Post New Review</h5>
+                <button type="button" id="createNewContent" class="modalClose" data-dismiss="modal" aria-label="Close">
+                    <span class="modalClose" id="createNewContent">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="forms" id="formsReviews">
+                   <div class="row">
+                        <div class="col">
+                            <label for="inputGame">Game</label>
+                            <input type="text" class="form-control contentInput" id="inputGame" required/>
+                        </div>
+                        <div class="col">
+                            <label for="inputGame">Platform</label>
+                            <input type="text" class="form-control contentInput" id="inputPlatform" required/>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="inputContent">Review</label>
+                        <textarea class="form-control contentInput" rows="10" id="inputContent"></textarea>
+                    </div>
+                    <div class="col-2">
+                        <label for="inputContent">Score</label>
+                        <input type="number" class="form-control contentInput" id="inputScore" min="0" max="5" required/>
+                    </div>
+                    <button type="submit" id="submitNew">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts {

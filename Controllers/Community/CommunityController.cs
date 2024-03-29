@@ -1,21 +1,42 @@
 ﻿using GamingCommunity.Entities;
 using GamingCommunity.Models;
+using GamingCommunity.Repositories.Implementations;
+using GamingCommunity.Repositories.Interfaces;
+using GamingCommunity.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
+using MongoDB.Driver.Core.Authentication;
+using System.Linq;
+using System.Security.Claims;
 
 namespace GamingCommunity.Controllers.Community
 {
     public class CommunityController : Controller
     {
         private readonly GamingCommunityDbContext _context;
+        private readonly INewContentService _newContentService;
 
-        public CommunityController(GamingCommunityDbContext context)
+        public CommunityController(GamingCommunityDbContext context, 
+                                  INewContentService newContentService)
         {
             _context = context;
+            _newContentService = newContentService;
+        }
+
+        private int GetUserFromClaim()
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            Claim nameIdentifierClaim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            int userId = int.Parse(nameIdentifierClaim.Value);
+            return userId;
+        }
+
+        public IActionResult YourProfile()
+        {
+            return View();
         }
 
         [HttpGet]
-        [Route("Gaming")]
+        [Route("/Community/Gaming")]
         public IActionResult Gaming()
         {
             List<GamingThreadViewModel> gamingThreads = _context.GamingThreads
@@ -71,13 +92,38 @@ namespace GamingCommunity.Controllers.Community
             return View(gamingThreads);
         }
 
-        public IActionResult YourProfile()
+        [HttpGet]
+        [Route("GetCommentsFromThread")]
+        public IActionResult GetCommentsFromThread(int threadId)
         {
-            return View();
+            try
+            {
+                List<CommentWithUsernameViewModel> comments = _context.Comments
+                    .Where(x => x.ThreadId == threadId)
+                    .Join(
+                        _context.Users,
+                        comment => comment.UserId,
+                        user => user.UserId,
+                        (comment, user) => new CommentWithUsernameViewModel
+                        {
+                            CommentId = comment.CommentId,
+                            Content = comment.Content,
+                            UserId = comment.UserId,
+                            CreatedAt = comment.CreatedAt,
+                            Username = user.Username
+                        })
+                    .ToList();
+
+                return Ok(comments);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
-        [Route("Reviews")]
+        [Route("/Community/Reviews")]
         public IActionResult Reviews()
         {
             List<GameReviewViewModel> gamingReviews = _context.GamesReviews
@@ -110,6 +156,7 @@ namespace GamingCommunity.Controllers.Community
                                 Score = group.GReview.Score,
                                 CreatedAt = group.GReview.CreatedAt
                             })
+                .OrderByDescending(x => x.CreatedAt)
                 .ToList();
             return View(gamingReviews);
         }
@@ -117,6 +164,73 @@ namespace GamingCommunity.Controllers.Community
         public IActionResult News()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        [Route("NewReview")]
+        public async Task<IActionResult> PostNewReview([FromBody] NewGameReviewViewModel newGameReviewViewModel)
+        {
+            if (newGameReviewViewModel == null)
+            {
+                return BadRequest();
+            }
+            int userId = GetUserFromClaim();
+
+            try
+            {
+                await _newContentService.AddNewReview(newGameReviewViewModel, userId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("NewThread")]
+        public async Task<IActionResult> PostNewThread([FromBody] NewGamingThreadViewModel newGamingThreadViewModel)
+        {
+            if (newGamingThreadViewModel == null)
+            {
+                return BadRequest();
+            }
+            int userId = GetUserFromClaim();
+
+            try
+            {
+                await _newContentService.AddNewThread(newGamingThreadViewModel, userId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("NewVote")]
+        public async Task<IActionResult> AddNewVote([FromBody] VoteInputModel voteInputModel)
+        {
+            if (voteInputModel == null)
+                return BadRequest();
+
+            if (voteInputModel.VoteType != "upvote" && voteInputModel.VoteType != "downvote")
+                return BadRequest();
+
+            int userId = GetUserFromClaim();
+
+            try
+            {
+                await _newContentService.AddNewVote(voteInputModel, userId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

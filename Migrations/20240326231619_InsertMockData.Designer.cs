@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamingCommunity.Migrations
 {
     [DbContext(typeof(GamingCommunityDbContext))]
-    [Migration("20240324194436_InsertMockData")]
+    [Migration("20240326231619_InsertMockData")]
     partial class InsertMockData
     {
         /// <inheritdoc />
@@ -182,6 +182,10 @@ namespace GamingCommunity.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("game_id");
 
+                    b.Property<int>("PlatformId")
+                        .HasColumnType("integer")
+                        .HasColumnName("platform_id");
+
                     b.Property<string>("ReviewText")
                         .HasColumnType("text")
                         .HasColumnName("review_text");
@@ -196,11 +200,11 @@ namespace GamingCommunity.Migrations
 
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("GameId")
-                        .IsUnique();
+                    b.HasIndex("GameId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("PlatformId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("game_reviews", "community_data");
                 });
@@ -576,14 +580,20 @@ namespace GamingCommunity.Migrations
             modelBuilder.Entity("GamingCommunity.Entities.GameReview", b =>
                 {
                     b.HasOne("GamingCommunity.Entities.Game", null)
-                        .WithOne()
-                        .HasForeignKey("GamingCommunity.Entities.GameReview", "GameId")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GamingCommunity.Entities.Platform", null)
+                        .WithMany()
+                        .HasForeignKey("PlatformId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GamingCommunity.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("GamingCommunity.Entities.GameReview", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

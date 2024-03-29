@@ -1,4 +1,6 @@
-﻿namespace GamingCommunity.Models
+﻿using GamingCommunity.Entities;
+
+namespace GamingCommunity.Models
 {
     public class GamingThreadViewModel
     {
