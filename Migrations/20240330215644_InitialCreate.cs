@@ -187,9 +187,11 @@ namespace GamingCommunity.Migrations
                     review_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     game_id = table.Column<int>(type: "integer", nullable: false),
+                    platform_id = table.Column<int>(type: "integer", nullable: false),
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     score = table.Column<int>(type: "integer", nullable: false),
-                    review_text = table.Column<string>(type: "text", nullable: true)
+                    review_text = table.Column<string>(type: "text", nullable: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -200,6 +202,13 @@ namespace GamingCommunity.Migrations
                         principalSchema: "community_data",
                         principalTable: "games",
                         principalColumn: "game_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_game_reviews_platforms_platform_id",
+                        column: x => x.platform_id,
+                        principalSchema: "community_data",
+                        principalTable: "platforms",
+                        principalColumn: "platform_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_game_reviews_users_user_id",
@@ -362,7 +371,8 @@ namespace GamingCommunity.Migrations
                     vote_type = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     thread_id = table.Column<int>(type: "integer", nullable: true),
-                    comment_id = table.Column<int>(type: "integer", nullable: true)
+                    comment_id = table.Column<int>(type: "integer", nullable: true),
+                    review_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -373,6 +383,12 @@ namespace GamingCommunity.Migrations
                         principalSchema: "community_data",
                         principalTable: "comments",
                         principalColumn: "comment_id");
+                    table.ForeignKey(
+                        name: "FK_votes_game_reviews_review_id",
+                        column: x => x.review_id,
+                        principalSchema: "community_data",
+                        principalTable: "game_reviews",
+                        principalColumn: "review_id");
                     table.ForeignKey(
                         name: "FK_votes_threads_thread_id",
                         column: x => x.thread_id,
@@ -418,15 +434,19 @@ namespace GamingCommunity.Migrations
                 name: "IX_game_reviews_game_id",
                 schema: "community_data",
                 table: "game_reviews",
-                column: "game_id",
-                unique: true);
+                column: "game_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_game_reviews_platform_id",
+                schema: "community_data",
+                table: "game_reviews",
+                column: "platform_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_game_reviews_user_id",
                 schema: "community_data",
                 table: "game_reviews",
-                column: "user_id",
-                unique: true);
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_games_content_rating_id",
@@ -536,6 +556,12 @@ namespace GamingCommunity.Migrations
                 column: "comment_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_votes_review_id",
+                schema: "community_data",
+                table: "votes",
+                column: "review_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_votes_thread_id",
                 schema: "community_data",
                 table: "votes",
@@ -551,10 +577,6 @@ namespace GamingCommunity.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "game_reviews",
-                schema: "community_data");
-
             migrationBuilder.DropTable(
                 name: "inbox_messages",
                 schema: "community_data");
@@ -572,11 +594,23 @@ namespace GamingCommunity.Migrations
                 schema: "community_data");
 
             migrationBuilder.DropTable(
+                name: "comments",
+                schema: "community_data");
+
+            migrationBuilder.DropTable(
+                name: "game_reviews",
+                schema: "community_data");
+
+            migrationBuilder.DropTable(
+                name: "threads",
+                schema: "community_data");
+
+            migrationBuilder.DropTable(
                 name: "games",
                 schema: "community_data");
 
             migrationBuilder.DropTable(
-                name: "comments",
+                name: "users",
                 schema: "community_data");
 
             migrationBuilder.DropTable(
@@ -597,14 +631,6 @@ namespace GamingCommunity.Migrations
 
             migrationBuilder.DropTable(
                 name: "publishers",
-                schema: "community_data");
-
-            migrationBuilder.DropTable(
-                name: "threads",
-                schema: "community_data");
-
-            migrationBuilder.DropTable(
-                name: "users",
                 schema: "community_data");
 
             migrationBuilder.DropTable(

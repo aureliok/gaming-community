@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/gcStyles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
 <body>
     <header>
@@ -53,33 +55,38 @@
         @{
             if (User.Identity.IsAuthenticated)
             {
-            <button class="toggleBtn" type="button" data-bs-toggle="collapse" data-bs-target="#firstSidebarLinks" aria-expanded="false" aria-controls="collapseExample">
-                firstSidebarLinks
-                <span id="collapseIcon" class="arrow-icon">▲</span>
-            </button>
-            <div class="firstSidbareLinks show" id="firstSidebarLinks">
-            </div>
-            <div class="division">
-            </div>
-            <button class="toggleBtn" type="button" data-bs-toggle="collapse" data-bs-target="#secondSidebarLinks" aria-expanded="false" aria-controls="collapseExample">
-                secondSidebarLinks
-                <span id="collapseIcon" class="arrow-icon">▲</span>
-            </button>
-            <div class="secondSidebarLinks show" id="secondSidebarLinks">
+                <button class="toggleBtn" type="button" data-bs-toggle="collapse" data-bs-target="#firstSidebarLinks" aria-expanded="false" aria-controls="collapseExample">
+                    Community
+                    <span id="collapseIcon" class="arrow-icon">▲</span>
+                </button>
+                <div class="firstSidbareLinks show" id="firstSidebarLinks">
+                    <a class="sidebar-link" asp-controller="Community" asp-action="Gaming">Gaming</a>
+                    <a class="sidebar-link" asp-controller="Community" asp-action="Reviews">Reviews</a>
+                    <a class="sidebar-link" asp-controller="Community" asp-action="News">News</a>
+                </div>
+                <div class="division">
+                </div>
+                <button class="toggleBtn" type="button" data-bs-toggle="collapse" data-bs-target="#secondSidebarLinks" aria-expanded="false" aria-controls="collapseExample">
+                    My Activities
+                    <span id="collapseIcon" class="arrow-icon">▲</span>
+                </button>
+                <div class="secondSidebarLinks show" id="secondSidebarLinks">
+                    <a class="sidebar-link" href="#">My Threads</a>
+                    <a class="sidebar-link" href="#">My Reviews</a>
                 </div>
             }
             else
             {
                 <div class="guestLinks">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    <a class="nav-link" asp-area="" asp-controller="Community" asp-action="Main">Community</a>
+                    <a class="nav-link" asp-area="" asp-controller="Community" asp-action="Gaming">Community</a>
                 </div>
             }
          }
     </div>
 
 
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

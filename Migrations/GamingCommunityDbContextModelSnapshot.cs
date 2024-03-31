@@ -171,9 +171,17 @@ namespace GamingCommunity.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ReviewId"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<int>("GameId")
                         .HasColumnType("integer")
                         .HasColumnName("game_id");
+
+                    b.Property<int>("PlatformId")
+                        .HasColumnType("integer")
+                        .HasColumnName("platform_id");
 
                     b.Property<string>("ReviewText")
                         .HasColumnType("text")
@@ -189,11 +197,11 @@ namespace GamingCommunity.Migrations
 
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("GameId")
-                        .IsUnique();
+                    b.HasIndex("GameId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("PlatformId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("game_reviews", "community_data");
                 });
@@ -493,6 +501,10 @@ namespace GamingCommunity.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("comment_id");
 
+                    b.Property<int?>("ReviewId")
+                        .HasColumnType("integer")
+                        .HasColumnName("review_id");
+
                     b.Property<int?>("ThreadId")
                         .HasColumnType("integer")
                         .HasColumnName("thread_id");
@@ -510,6 +522,8 @@ namespace GamingCommunity.Migrations
                     b.HasKey("VoteId");
 
                     b.HasIndex("CommentId");
+
+                    b.HasIndex("ReviewId");
 
                     b.HasIndex("ThreadId");
 
@@ -569,14 +583,20 @@ namespace GamingCommunity.Migrations
             modelBuilder.Entity("GamingCommunity.Entities.GameReview", b =>
                 {
                     b.HasOne("GamingCommunity.Entities.Game", null)
-                        .WithOne()
-                        .HasForeignKey("GamingCommunity.Entities.GameReview", "GameId")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GamingCommunity.Entities.Platform", null)
+                        .WithMany()
+                        .HasForeignKey("PlatformId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GamingCommunity.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("GamingCommunity.Entities.GameReview", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -643,6 +663,10 @@ namespace GamingCommunity.Migrations
                     b.HasOne("GamingCommunity.Entities.Comment", null)
                         .WithMany()
                         .HasForeignKey("CommentId");
+
+                    b.HasOne("GamingCommunity.Entities.GameReview", null)
+                        .WithMany()
+                        .HasForeignKey("ReviewId");
 
                     b.HasOne("GamingCommunity.Entities.GamingThread", null)
                         .WithMany()

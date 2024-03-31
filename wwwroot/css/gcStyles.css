@@ -1,12 +1,4 @@
-﻿/*:root {
-    --palettePurple: #22223b;
-    --paletteBrown: #5F374B;
-    --paletteCoffee: #8C6A5D;
-    --paletteVintage: #EEE4B1;
-}
-*/
-
-/*https://coolors.co/palette/22223b-4a4e69-9a8c98-c9ada7-f2e9e4*/
+﻿/*https://coolors.co/palette/22223b-4a4e69-9a8c98-c9ada7-f2e9e4*/
 :root {
     --palette1: #22223b;
     --palette2: #4a4e69;
@@ -92,15 +84,17 @@
 }
 
 .container {
-    margin-left: 13%;
+    margin-left: 12%;
     z-index: 0;
     overflow-x: hidden;
+    min-height: 85vh;
 }
 
 
 /*Login.cshtml*/
-.container, container-fluid {
+.containerBody {
     min-height: 85vh;
+    padding-left: 12%;
 }
 
 
@@ -194,4 +188,109 @@
 
 .profileWindow h5 {
     text-decoration: underline;
+}
+
+
+/*Reviews/Gaming.cshml*/
+.containerTable {
+    margin-left: 230px;
+    min-height: 85vh;
+}
+
+.wrap-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+
+
+.custom-th {
+    max-width: 20%;
+    height: 3rem;
+    align-content: center;
+    text-align: center;
+}
+
+.commentsCount {
+    width: 2em;
+    text-align: center;
+}
+
+.truncate-text {
+    max-width: 20em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.show {
+    display: block;
+}
+
+.modal-dialog {
+    width: 100%;
+}
+
+.forms .contentInput {
+    width: 100%;
+}
+
+.postNewBtn {
+    background-color: var(--palette1);
+    color: var(--palette5);
+    border: 2px solid var(--palette1);
+    font-weight: bold;
+}
+
+.postNewBtn:hover {
+    background-color: var(--palette5);
+    color: var(--palette1);
+    border: 2px solid var(--palette1);
+}
+
+.originalPost, .reply {
+    display: flex;
+    flex-direction: column;
+}
+
+.postDate {
+    text-align: right;
+    padding-right: 2%;
+}
+
+.postAuthor {
+    text-align: left;
+    padding-left: 2%;
+}
+
+.postContent {
+    padding: 0 2%;
+}
+
+.post {
+    border: 1px solid var(--palette2);
+    border-radius: 5px;
+}
+
+.reply {
+    margin: 1% 0;
+}
+
+.votesContainer {
+    align-self: flex-end;
+    display: flex;
+    padding-right: 2%;
+}
+
+.replyToThread {
+    display: flex;
+    padding: 1%;
+    flex-direction: column;
+}
+
+.replyInputContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: .5%;
 }

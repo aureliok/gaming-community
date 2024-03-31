@@ -93,6 +93,7 @@ namespace GamingCommunity.Entities
                 entity.Property(p => p.UserId).HasColumnName("user_id");
                 entity.Property(p => p.ThreadId).HasColumnName("thread_id");
                 entity.Property(p => p.CommentId).HasColumnName("comment_id");
+                entity.Property(p => p.ReviewId).HasColumnName("review_id");
 
                 entity.HasOne<User>()
                       .WithMany()
@@ -105,6 +106,10 @@ namespace GamingCommunity.Entities
                 entity.HasOne<Comment>()
                       .WithMany()
                       .HasForeignKey(v => v.CommentId);
+
+                entity.HasOne<GameReview>()
+                      .WithMany()
+                      .HasForeignKey(v => v.ReviewId);
             });
 
             modelBuilder.Entity<UserProfile>(entity =>
@@ -224,17 +229,23 @@ namespace GamingCommunity.Entities
                 entity.HasKey(p => p.ReviewId);
                 entity.Property(p => p.ReviewId).HasColumnName("review_id");
                 entity.Property(p => p.GameId).HasColumnName("game_id");
+                entity.Property(p => p.PlatformId).HasColumnName("platform_id");
                 entity.Property(p => p.UserId).HasColumnName("user_id");
                 entity.Property(p => p.Score).HasColumnName("score").IsRequired();
                 entity.Property(p => p.ReviewText).HasColumnName("review_text");
+                entity.Property(p => p.CreatedAt).HasColumnName("created_at");
 
                 entity.HasOne<Game>()
-                      .WithOne()
-                      .HasForeignKey<GameReview>(gr => gr.GameId);
+                      .WithMany()
+                      .HasForeignKey(gr => gr.GameId);
 
                 entity.HasOne<User>()
-                      .WithOne()
-                      .HasForeignKey<GameReview>(up => up.UserId);
+                      .WithMany()
+                      .HasForeignKey(up => up.UserId);
+
+                entity.HasOne<Platform>()
+                      .WithMany()
+                      .HasForeignKey(p => p.PlatformId);
             });
 
             modelBuilder.Entity<UserConnection>(entity =>

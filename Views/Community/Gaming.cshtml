@@ -1,0 +1,136 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<GamingCommunity.Models.GamingThreadViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Gaming";
+}
+
+
+<div class="containerTable">
+    <div class="row">
+        <div class="col">
+            <h2 class="mb-3">Threads</h2>
+        </div>
+        <div class="col-auto">
+            <button type="button" data-toggle="modal" data-target="createNewContent" class="btn btn-primary postNewBtn">New Thread</button>
+        </div>
+    </div>
+
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="custom-th">Title</th>
+                    <th class="custom-th">Content</th>
+                    <th class="custom-th">Original Poster </th>
+                    <th class="custom-th commentsCount">Comments </th>
+                    <th class="custom-th">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var thread in Model)
+                {
+                    <tr data-toggle="modal" data-target="#modal-@thread.ThreadId">
+                        <td class="custom-th">@Html.DisplayFor(modelItem => thread.Title)</td>
+                        <td class="truncate-text custom-th">@Html.DisplayFor(modelItem => thread.Content)</td>
+                        <td class="custom-th">@Html.DisplayFor(modelItem => thread.Username)</td>
+                        <td class="custom-th commentsCount">@Html.DisplayFor(modelItem => thread.CommentsCount)</td>
+                        <td class="custom-th">@thread.CreatedAt.ToString("g")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@foreach (var thread in Model)
+{
+    <div class="modal fade" id="modal-@thread.ThreadId" tabindex="-1" role="dialog" aria-labelledby="modalLabel-@thread.ThreadId" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@thread.Title</h5>
+                    <button type="button" id="@thread.ThreadId" class="modalClose" data-dismiss="modal" aria-label="Close">
+                        <span class="modalClose" id="@thread.ThreadId">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="originalPost post">
+                        <div class="postData row">
+                            <div class="col-9 postAuthor">
+                                <img src="~/imgs/user_avatars/conker.jpg" class="mini-avatar" alt="avatar image" />
+                                <span><strong>@thread.Username</strong> says:</span>
+                            </div>
+                            <div class="col postDate">
+                                <p>@thread.CreatedAt</p>
+                            </div>
+                        </div>
+                        <div class="postContent">
+                            <p>@thread.Content</p>
+                        </div>
+                        <div class="votesContainer">
+                            <button type="button" class="upvoteBtn" id="btn-thread-upvote-@thread.ThreadId">
+                                <i class="bi bi-arrow-up-circle upvoteBtn"></i>
+                            </button>
+                            <span class="upvoteCount" id="thread-upvote-@thread.ThreadId">0</span>
+                            <button type="button" class="downvoteBtn" id="btn-thread-downvote-@thread.ThreadId">
+                                <i class="bi bi-arrow-down-circle upvoteBtn"></i>
+                            </button>
+                            <span class="downvoteCount" id="thread-downvote-@thread.ThreadId">0</span>   
+                        </div>
+                    </div>
+
+                    <div class="replies" id="replies-@thread.ThreadId">
+                    </div>
+
+                    <div class="replyToThread" id="reply-@thread.ThreadId">
+                        <forms class="formsReply" id="forms-@thread.ThreadId">
+                            <label for="replyContent-@thread.ThreadId">Reply</label>
+                            <textarea class="form-control replyInput" rows="3" id="replyContent-@thread.ThreadId"></textarea>
+                            <div class="replyInputContainer">
+                                <button type="click" class="replyBtn" id="replyBtn-@thread.ThreadId">Post Reply</button>
+                            </div>
+                        </forms>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="@thread.ThreadId" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="createNewContent" tabindex="-1" role="dialog" aria-labelledby="modalLabel-newThread" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Thread</h5>
+                <button type="button" id="createNewContent" class="modalClose" data-dismiss="modal" aria-label="Close">
+                    <span class="modalClose" id="createNewContent">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="forms" id="formsThreads">
+                    <div>
+                        <label for="inputTitle">Title</label>
+                        <input type="text" class="form-control contentInput" id="inputTitle" />
+                    </div>
+                    <div>
+                        <label for="inputContent">Post</label>
+                        <textarea class="form-control contentInput" rows="10" id="inputContent"></textarea>
+                    </div>
+                    <button type="submit" id="submitNew">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="module" src="~/js/Community/reviews.js"></script>
+}
