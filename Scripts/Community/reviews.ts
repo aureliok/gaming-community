@@ -6,6 +6,11 @@
     userId: number;
 }
 
+interface TupleIdModel {
+    ContentType: string,
+    Id: string
+}
+
 
 async function getCommentsFromThread(threadId: Number): Promise<Comment[]> {
 
@@ -46,14 +51,14 @@ function addCommentsOnThread(comments: Comment[], threadId: string): void {
                 <p>${comment.content}</p>
             </div>
             <div class="votesContainer">
-                <button type="button" class="upvoteBtn" id="thread-upvote-${comment.commentId}">
+                <button type="button" class="upvoteBtn" id="btn-comment-upvote-${comment.commentId}">
                     <i class="bi bi-arrow-up-circle upvoteBtn"></i>
                 </button>
-                <span class="upvoteCount" id="comment-upvote-${comment.commentId}">15</span>
-                <button type="button" class="downvoteBtn" id="thread-downvote-${comment.commentId}">
+                <span class="upvoteCount" id="comment-upvote-${comment.commentId}">0</span>
+                <button type="button" class="downvoteBtn" id="btn-comment-downvote-${comment.commentId}">
                     <i class="bi bi-arrow-down-circle upvoteBtn"></i>
                 </button>
-                <span class="downvoteCount" id="comment-downvote-${comment.commentId}">-2</span>   
+                <span class="downvoteCount" id="comment-downvote-${comment.commentId}">0</span>   
             </div>
         </div>
         `;
@@ -61,6 +66,50 @@ function addCommentsOnThread(comments: Comment[], threadId: string): void {
 
 }
 
+function refreshVoteCount(tupleVote): void {
+    const voteSpanUpvote = <HTMLSpanElement>document.getElementById(`${tupleVote.contentType}-upvote-${tupleVote.id}`);
+    const voteSpanDownvote = <HTMLSpanElement>document.getElementById(`${tupleVote.contentType}-downvote-${tupleVote.id}`);
+
+    if (tupleVote.upvoteCount > 0) {
+        voteSpanUpvote.innerText = tupleVote.upvoteCount;
+    }
+
+    if (tupleVote.downvoteCount > 0) {
+        voteSpanDownvote.innerText = tupleVote.downvoteCount;
+    }
+    
+}
+
+async function refreshVotes(): Promise<void> {
+    const modalActive = <HTMLDivElement>document.querySelector(".modal-show");
+    const votesContainer = modalActive.querySelectorAll(".votesContainer") as NodeListOf<HTMLDivElement>;
+    var idsTuples: TupleIdModel[] = [];
+
+    votesContainer.forEach(vote => {
+        const upvoteCount = <HTMLSpanElement>vote.querySelector(".upvoteCount");
+        const upvoteCountId = <string>upvoteCount.getAttribute("id");
+        const ids_split = upvoteCountId.split('-');
+        idsTuples.push({ ContentType: ids_split[0], Id: ids_split[2] });
+    });
+
+
+    const response = await fetch("/GetVotes", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(idsTuples)
+    })
+
+    if (response.ok) {
+        const data = await response.json();
+        for (var i = 0; i < data.length; i++) {
+            refreshVoteCount(data[i]);
+        }
+    } else {
+        console.log("Something went wrong on refreshing votes count");
+    }
+}
 
 document.addEventListener("DOMContentLoaded", function (): void {
     const tableRows = document.querySelectorAll(".table tbody tr");
@@ -76,8 +125,11 @@ document.addEventListener("DOMContentLoaded", function (): void {
                     const threadId: string = targetModalId.split("-")[1];
                     const comments: Comment[] = await getCommentsFromThread(Number(threadId));
                     addCommentsOnThread(comments, threadId);
-                    targetModal.classList.add('show');
-                    targetModal.setAttribute('aria-hidden', 'false');
+                    targetModal.classList.add("show");
+                    targetModal.classList.add("modal-show");
+                    targetModal.setAttribute("aria-hidden", "false");
+
+                    refreshVotes();
                 }
             }
             return;
@@ -137,6 +189,7 @@ document.addEventListener("click", function (e): void {
 
     if (target === modal && !target.classList.contains("modalClose")) {
         modal.classList.remove("show");
+        modal.classList.remove("modal-show");
         return;
     }
 
@@ -145,10 +198,12 @@ document.addEventListener("click", function (e): void {
 
         if (modalId === "createNewContent") {
             document.getElementById(modalId)?.classList.remove("show");
+            document.getElementById(modalId)?.classList.remove("modal-show");
             return;
         }
 
         document.getElementById(`modal-${modalId}`)?.classList.remove("show");
+        document.getElementById(`modal-${modalId}`)?.classList.remove("modal-show");
     } else {
         return;
     }
@@ -161,12 +216,10 @@ async function addVote(target: HTMLElement): Promise<void> {
 
     if (!voteParts) return;
 
-    const contentType = voteParts[0];
-    const voteType = voteParts[1];
-    const voteId = parseInt(voteParts[2]);
+    const contentType = voteParts[1];
+    const voteType = voteParts[2];
+    const voteId = parseInt(voteParts[3]);
     var payload;
-
-   /* console.log(voteId, voteType, contentType);*/
 
     if (contentType === "thread") {
         payload = {
@@ -178,10 +231,15 @@ async function addVote(target: HTMLElement): Promise<void> {
             VoteType: voteType,
             CommentId: voteId
         }
-    } else {
+    } else if (contentType === "review") {
+        payload = {
+            VoteType: voteType,
+            ReviewId: voteId
+        }
+    }
+    else {
         return;
     }
-
 
     const response = await fetch("/NewVote", {
         method: "POST",
@@ -192,7 +250,7 @@ async function addVote(target: HTMLElement): Promise<void> {
     });
 
     if (response.ok) {
-        console.log("worked");
+        refreshVotes();
     } else {
         console.log("some error ocurred");
     }

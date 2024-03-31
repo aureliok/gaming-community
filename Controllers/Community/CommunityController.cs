@@ -6,6 +6,7 @@ using GamingCommunity.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver.Core.Authentication;
 using System.Linq;
+using System.Net.Mime;
 using System.Security.Claims;
 
 namespace GamingCommunity.Controllers.Community
@@ -84,7 +85,7 @@ namespace GamingCommunity.Controllers.Community
                     Content = group.Key.Content,
                     CreatedAt = group.Key.CreatedAt,
                     Username = group.Key.Username,
-                    CommentsCount = group.Count()
+                    CommentsCount = group.Count(x => x.Comment != null)
                 })
                 .OrderByDescending(x => x.CreatedAt)
                 .ToList();
@@ -228,6 +229,122 @@ namespace GamingCommunity.Controllers.Community
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+
+        public async Task<IEnumerable<Vote>> GetVotesForContentType(string contentType, IEnumerable<int?> ids)
+        {
+            if (contentType == "comment")
+            {
+                return _context.Votes.Where(vote => ids.Contains(vote.CommentId)).ToList();
+
+            } else if (contentType == "review")
+            {
+                return _context.Votes.Where(vote => ids.Contains(vote.ReviewId)).ToList();
+
+            } else if (contentType == "thread")
+            {
+                return _context.Votes.Where(vote => ids.Contains(vote.ThreadId)).ToList();
+            }
+
+            throw new NotSupportedException(contentType);
+        }
+
+        public VoteAggCountViewModel[] GetVoteAggCount(IEnumerable<Vote> votes, string cType)
+        {
+            if (cType == "comment")
+            {
+                VoteAggCountViewModel[] votesAgg = votes
+                                                .GroupBy(vote => vote.CommentId)
+                                                .Select(group => new VoteAggCountViewModel
+                                                {
+                                                    Id = group.Key,
+                                                    ContentType = "comment",
+                                                    UpvoteCount = group.Count(vote => vote.VoteType == "upvote"),
+                                                    DownvoteCount = group.Count(vote => vote.VoteType == "downvote")
+                                                })
+                                                .ToArray();
+
+                return votesAgg;
+
+            } else if (cType == "review")
+            {
+                VoteAggCountViewModel[] votesAgg = votes
+                                                .GroupBy(vote => vote.ReviewId)
+                                                .Select(group => new VoteAggCountViewModel
+                                                {
+                                                    Id = group.Key,
+                                                    ContentType = "review",
+                                                    UpvoteCount = group.Count(vote => vote.VoteType == "upvote"),
+                                                    DownvoteCount = group.Count(vote => vote.VoteType == "downvote")
+                                                })
+                                                .ToArray();
+
+                return votesAgg;
+
+            } else if (cType == "thread")
+            {
+                VoteAggCountViewModel[] votesAgg = votes
+                                                .GroupBy(vote => vote.ThreadId)
+                                                .Select(group => new VoteAggCountViewModel
+                                                {
+                                                    Id = group.Key,
+                                                    ContentType = "thread",
+                                                    UpvoteCount = group.Count(vote => vote.VoteType == "upvote"),
+                                                    DownvoteCount = group.Count(vote => vote.VoteType == "downvote")
+                                                })
+                                                .ToArray();
+
+                return votesAgg;
+
+            } else
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+
+        [HttpPost]
+        [Route("GetVotes")]
+        public async Task<IActionResult> GetVotes([FromBody] TupleIdModel[] tupleIds)
+        {
+            IEnumerable<TupleIdModel> tuplesThread = tupleIds.Where(tuple => tuple.ContentType == "thread");
+            IEnumerable<TupleIdModel> tuplesComment = tupleIds.Where(tuple => tuple.ContentType == "comment");
+            IEnumerable<TupleIdModel> tuplesReview = tupleIds.Where(tuple => tuple.ContentType == "review");
+            IEnumerable<VoteAggCountViewModel> tuplesReturnVotes = Enumerable.Empty<VoteAggCountViewModel>();
+
+            if (tuplesThread.Count() > 0)
+            {
+                IEnumerable<Vote> votesThread = await GetVotesForContentType("thread", tuplesThread.Select(tuple => tuple.Id));
+                VoteAggCountViewModel[] votesAggThread = GetVoteAggCount(votesThread, "thread");
+
+                tuplesReturnVotes = tuplesReturnVotes.Concat(votesAggThread);
+            }
+
+            if (tuplesComment.Count() > 0)
+            {
+                var test = tuplesComment.Select(tuple => tuple.Id);
+                IEnumerable<Vote> votesComment = await GetVotesForContentType("comment", tuplesComment.Select(tuple => tuple.Id));
+                VoteAggCountViewModel[] votesAggComment = GetVoteAggCount(votesComment, "comment");
+
+                tuplesReturnVotes = tuplesReturnVotes.Concat(votesAggComment);
+            }
+
+            if (tuplesReview.Count() > 0)
+            {
+                IEnumerable<Vote> votesReview = await GetVotesForContentType("review", tuplesReview.Select(tuple => tuple.Id));
+                VoteAggCountViewModel[] votesAggReview = GetVoteAggCount(votesReview, "review");
+
+                tuplesReturnVotes = tuplesReturnVotes.Concat(votesAggReview);
+            }
+
+            if (tuplesReturnVotes.Any())
+            {
+                return Ok(tuplesReturnVotes);
+            } else
+            {
+                return BadRequest("No vote data to send");
             }
         }
 

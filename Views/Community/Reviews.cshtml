@@ -59,14 +59,14 @@
                     <p>@thread.ReviewContent</p>
                 </div>
                 <div class="votesContainer">
-                    <button type="button" class="upvoteBtn" id="thread-upvote-@thread.ReviewId">
+                    <button type="button" class="upvoteBtn" id="btn-review-upvote-@thread.ReviewId">
                         <i class="bi bi-arrow-up-circle upvoteBtn"></i>
                     </button>
-                    <span class="upvoteCount">15</span>
-                    <button type="button" class="downvoteBtn" id="thread-downvote-@thread.ReviewId">
+                    <span class="upvoteCount" id="review-upvote-@thread.ReviewId">0</span>
+                    <button type="button" class="downvoteBtn" id="btn-review-downvote-@thread.ReviewId">
                         <i class="bi bi-arrow-down-circle upvoteBtn"></i>
                     </button>
-                    <span class="downvoteCount">-2</span>
+                    <span class="downvoteCount" id="review-downvote-@thread.ReviewId">0</span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="@thread.ReviewId" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>

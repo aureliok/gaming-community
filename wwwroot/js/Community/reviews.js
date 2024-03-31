@@ -63,8 +63,58 @@ function addCommentsOnThread(comments, threadId) {
     repliesBody.innerHTML = "";
     for (var _i = 0, comments_1 = comments; _i < comments_1.length; _i++) {
         var comment = comments_1[_i];
-        repliesBody.innerHTML += "\n        <div class=\"reply post\">\n            <div class=\"postData row\">\n                <div class=\"col-9 postAuthor\">\n                    <img src=\"/imgs/user_avatars/conker.jpg\" class=\"mini-avatar\" alt=\"avatar image\" />\n                    <span><strong>".concat(comment.username, "</strong> says:</span>\n                </div>\n                <div class=\"col postDate\">\n                    <p>").concat(new Date(comment.createdAt), "</p>\n                </div>\n            </div>\n            <div class=\"postContent\">\n                <p>").concat(comment.content, "</p>\n            </div>\n            <div class=\"votesContainer\">\n                <button type=\"button\" class=\"upvoteBtn\" id=\"thread-upvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-up-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"upvoteCount\" id=\"comment-upvote-").concat(comment.commentId, "\">15</span>\n                <button type=\"button\" class=\"downvoteBtn\" id=\"thread-downvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-down-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"downvoteCount\" id=\"comment-downvote-").concat(comment.commentId, "\">-2</span>   \n            </div>\n        </div>\n        ");
+        repliesBody.innerHTML += "\n        <div class=\"reply post\">\n            <div class=\"postData row\">\n                <div class=\"col-9 postAuthor\">\n                    <img src=\"/imgs/user_avatars/conker.jpg\" class=\"mini-avatar\" alt=\"avatar image\" />\n                    <span><strong>".concat(comment.username, "</strong> says:</span>\n                </div>\n                <div class=\"col postDate\">\n                    <p>").concat(new Date(comment.createdAt), "</p>\n                </div>\n            </div>\n            <div class=\"postContent\">\n                <p>").concat(comment.content, "</p>\n            </div>\n            <div class=\"votesContainer\">\n                <button type=\"button\" class=\"upvoteBtn\" id=\"btn-comment-upvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-up-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"upvoteCount\" id=\"comment-upvote-").concat(comment.commentId, "\">0</span>\n                <button type=\"button\" class=\"downvoteBtn\" id=\"btn-comment-downvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-down-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"downvoteCount\" id=\"comment-downvote-").concat(comment.commentId, "\">0</span>   \n            </div>\n        </div>\n        ");
     }
+}
+function refreshVoteCount(tupleVote) {
+    var voteSpanUpvote = document.getElementById("".concat(tupleVote.contentType, "-upvote-").concat(tupleVote.id));
+    var voteSpanDownvote = document.getElementById("".concat(tupleVote.contentType, "-downvote-").concat(tupleVote.id));
+    if (tupleVote.upvoteCount > 0) {
+        voteSpanUpvote.innerText = tupleVote.upvoteCount;
+    }
+    if (tupleVote.downvoteCount > 0) {
+        voteSpanDownvote.innerText = tupleVote.downvoteCount;
+    }
+}
+function refreshVotes() {
+    return __awaiter(this, void 0, void 0, function () {
+        var modalActive, votesContainer, idsTuples, response, data, i;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    modalActive = document.querySelector(".modal-show");
+                    votesContainer = modalActive.querySelectorAll(".votesContainer");
+                    idsTuples = [];
+                    votesContainer.forEach(function (vote) {
+                        var upvoteCount = vote.querySelector(".upvoteCount");
+                        var upvoteCountId = upvoteCount.getAttribute("id");
+                        var ids_split = upvoteCountId.split('-');
+                        idsTuples.push({ ContentType: ids_split[0], Id: ids_split[2] });
+                    });
+                    return [4 /*yield*/, fetch("/GetVotes", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(idsTuples)
+                        })];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) return [3 /*break*/, 3];
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    data = _a.sent();
+                    for (i = 0; i < data.length; i++) {
+                        refreshVoteCount(data[i]);
+                    }
+                    return [3 /*break*/, 4];
+                case 3:
+                    console.log("Something went wrong on refreshing votes count");
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
 }
 document.addEventListener("DOMContentLoaded", function () {
     var tableRows = document.querySelectorAll(".table tbody tr");
@@ -84,8 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         case 1:
                             comments = _a.sent();
                             addCommentsOnThread(comments, threadId);
-                            targetModal.classList.add('show');
-                            targetModal.setAttribute('aria-hidden', 'false');
+                            targetModal.classList.add("show");
+                            targetModal.classList.add("modal-show");
+                            targetModal.setAttribute("aria-hidden", "false");
+                            refreshVotes();
                             _a.label = 2;
                         case 2: return [2 /*return*/];
                     }
@@ -133,7 +185,7 @@ function addComment(target, modalId) {
     });
 }
 document.addEventListener("click", function (e) {
-    var _a, _b;
+    var _a, _b, _c, _d;
     var target = e.target;
     var modalId = target.getAttribute("id");
     if (target.classList.contains("upvoteBtn") || target.classList.contains("downvoteBtn")) {
@@ -149,15 +201,18 @@ document.addEventListener("click", function (e) {
     var modal = document.getElementById(modalId);
     if (target === modal && !target.classList.contains("modalClose")) {
         modal.classList.remove("show");
+        modal.classList.remove("modal-show");
         return;
     }
     if (target.classList.contains("modalClose")) {
         var modalId_1 = target.getAttribute("id");
         if (modalId_1 === "createNewContent") {
             (_a = document.getElementById(modalId_1)) === null || _a === void 0 ? void 0 : _a.classList.remove("show");
+            (_b = document.getElementById(modalId_1)) === null || _b === void 0 ? void 0 : _b.classList.remove("modal-show");
             return;
         }
-        (_b = document.getElementById("modal-".concat(modalId_1))) === null || _b === void 0 ? void 0 : _b.classList.remove("show");
+        (_c = document.getElementById("modal-".concat(modalId_1))) === null || _c === void 0 ? void 0 : _c.classList.remove("show");
+        (_d = document.getElementById("modal-".concat(modalId_1))) === null || _d === void 0 ? void 0 : _d.classList.remove("modal-show");
     }
     else {
         return;
@@ -174,10 +229,9 @@ function addVote(target) {
                     voteParts = buttonVoteId === null || buttonVoteId === void 0 ? void 0 : buttonVoteId.split("-");
                     if (!voteParts)
                         return [2 /*return*/];
-                    contentType = voteParts[0];
-                    voteType = voteParts[1];
-                    voteId = parseInt(voteParts[2]);
-                    /* console.log(voteId, voteType, contentType);*/
+                    contentType = voteParts[1];
+                    voteType = voteParts[2];
+                    voteId = parseInt(voteParts[3]);
                     if (contentType === "thread") {
                         payload = {
                             VoteType: voteType,
@@ -188,6 +242,12 @@ function addVote(target) {
                         payload = {
                             VoteType: voteType,
                             CommentId: voteId
+                        };
+                    }
+                    else if (contentType === "review") {
+                        payload = {
+                            VoteType: voteType,
+                            ReviewId: voteId
                         };
                     }
                     else {
@@ -203,7 +263,7 @@ function addVote(target) {
                 case 1:
                     response = _b.sent();
                     if (response.ok) {
-                        console.log("worked");
+                        refreshVotes();
                     }
                     else {
                         console.log("some error ocurred");
