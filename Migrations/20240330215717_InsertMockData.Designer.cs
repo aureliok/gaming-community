@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamingCommunity.Migrations
 {
     [DbContext(typeof(GamingCommunityDbContext))]
-    [Migration("20240326231619_InsertMockData")]
+    [Migration("20240330215717_InsertMockData")]
     partial class InsertMockData
     {
         /// <inheritdoc />
@@ -504,6 +504,10 @@ namespace GamingCommunity.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("comment_id");
 
+                    b.Property<int?>("ReviewId")
+                        .HasColumnType("integer")
+                        .HasColumnName("review_id");
+
                     b.Property<int?>("ThreadId")
                         .HasColumnType("integer")
                         .HasColumnName("thread_id");
@@ -521,6 +525,8 @@ namespace GamingCommunity.Migrations
                     b.HasKey("VoteId");
 
                     b.HasIndex("CommentId");
+
+                    b.HasIndex("ReviewId");
 
                     b.HasIndex("ThreadId");
 
@@ -660,6 +666,10 @@ namespace GamingCommunity.Migrations
                     b.HasOne("GamingCommunity.Entities.Comment", null)
                         .WithMany()
                         .HasForeignKey("CommentId");
+
+                    b.HasOne("GamingCommunity.Entities.GameReview", null)
+                        .WithMany()
+                        .HasForeignKey("ReviewId");
 
                     b.HasOne("GamingCommunity.Entities.GamingThread", null)
                         .WithMany()

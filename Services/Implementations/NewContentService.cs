@@ -13,13 +13,15 @@ namespace GamingCommunity.Services.Implementations
         private readonly IGameReviewRepository _gameReviewRepository;
         private readonly IGamingThreadRepository _gameThreadRepository;
         private readonly IVoteRepository _voteRepository;
+        private readonly ICommentRepository _commentRepository;
         
         public NewContentService(IGameRepository gameRepository,
                           IDeveloperRepository developerRepository,
                           IPlatformRepository platformRepository,
                           IGameReviewRepository gameReviewRepository,
                           IGamingThreadRepository gamingThreadRepository,
-                          IVoteRepository voteRepository)
+                          IVoteRepository voteRepository,
+                          ICommentRepository commentRepository)
         {
             _gameRepository = gameRepository;
             _developerRepository = developerRepository;
@@ -27,6 +29,7 @@ namespace GamingCommunity.Services.Implementations
             _gameReviewRepository = gameReviewRepository;
             _gameThreadRepository = gamingThreadRepository;
             _voteRepository = voteRepository;
+            _commentRepository = commentRepository;
         }
 
         public async Task AddNewReview(NewGameReviewViewModel viewModel, int userId)
@@ -66,6 +69,19 @@ namespace GamingCommunity.Services.Implementations
             await _gameThreadRepository.AddAsync(gamingThread);
         }
 
+        public async Task AddNewReply(NewReplyModel viewModel, int userId)
+        {
+            Comment comment = new Comment
+            {
+                Content = viewModel.Content,
+                CreatedAt = DateTime.UtcNow,
+                UserId = userId,
+                ThreadId = viewModel.ThreadId
+            };
+
+            await _commentRepository.AddAsync(comment);
+        }
+
         public async Task AddNewVote(VoteInputModel voteInputModel, int userId)
         {
 
@@ -75,6 +91,7 @@ namespace GamingCommunity.Services.Implementations
                 UserId = userId,
                 ThreadId = voteInputModel.ThreadId != 0 ? voteInputModel.ThreadId : null,
                 CommentId = voteInputModel.CommentId != 0 ? voteInputModel.CommentId : null,
+                ReviewId = voteInputModel.ReviewId != 0 ? voteInputModel.ReviewId : null
             };
 
             await _voteRepository.AddAsync(vote);

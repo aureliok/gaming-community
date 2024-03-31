@@ -42,18 +42,6 @@ INSERT INTO community_data.comments (content, created_at, user_id, thread_id) VA
     ,('Comment 10', CURRENT_TIMESTAMP - INTERVAL '10 hours', 5, 2);
 
 
-INSERT INTO community_data.votes (vote_type, user_id, thread_id, comment_id) VALUES
-    ('upvote', 1, 1, 1)
-    ,('downvote', 2, 1, NULL)
-    ,('upvote', 3, NULL, 2)
-    ,('downvote', 4, 2, NULL)
-    ,('upvote', 5, 3, NULL)
-    ,('downvote', 1, 3, NULL)
-    ,('upvote', 2, 4, NULL)
-    ,('downvote', 3, 4, NULL)
-    ,('upvote', 4, 5, NULL)
-    ,('downvote', 5, 5, NULL);
-
 
 INSERT INTO community_data.user_profiles (user_id, bio, avatar_id, gender, birth_date, gaming_platform_link) VALUES
     (1, 'I love gaming!', 'randomstring', 'F', '2000-01-03', 'https://example.com/platform1')
@@ -180,3 +168,18 @@ INSERT INTO community_data.inbox_messages (sender_id, recipient_id, message_text
     ,(7, 6, 'Sure, sounds good!', '2023-04-01 11:15:00')
     ,(8, 9, 'Did you see the latest game announcement?', '2023-05-01 12:00:00')
     ,(9, 8, 'Yes, it looks amazing!', '2023-05-01 12:15:00');
+
+
+INSERT INTO community_data.votes (vote_type, user_id, thread_id, comment_id, review_id) VALUES
+    ('upvote', 1, 1, 1, NULL)
+    ,('downvote', 2, 1, NULL, NULL)
+    ,('upvote', 3, NULL, 2, NULL)
+    ,('downvote', 4, 2, NULL, NULL)
+    ,('upvote', 5, 3, NULL, NULL)
+    ,('downvote', 1, 3, NULL, NULL)
+    ,('upvote', 2, 4, NULL, NULL)
+    ,('downvote', 3, 4, NULL, NULL)
+    ,('upvote', 4, 5, NULL, NULL)
+    ,('downvote', 5, 5, NULL, NULL)
+    ,('downvote', 1, NULL, NULL, 1)
+    ,('upvote', 1, NULL, NULL, 1);

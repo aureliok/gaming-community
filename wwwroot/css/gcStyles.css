@@ -273,8 +273,24 @@
     border-radius: 5px;
 }
 
+.reply {
+    margin: 1% 0;
+}
+
 .votesContainer {
     align-self: flex-end;
     display: flex;
     padding-right: 2%;
+}
+
+.replyToThread {
+    display: flex;
+    padding: 1%;
+    flex-direction: column;
+}
+
+.replyInputContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: .5%;
 }

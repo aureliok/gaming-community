@@ -58,11 +58,12 @@ function getCommentsFromThread(threadId) {
 }
 function addCommentsOnThread(comments, threadId) {
     var repliesBody = document.getElementById("replies-".concat(threadId));
-    console.log(repliesBody);
+    if (!repliesBody)
+        return;
     repliesBody.innerHTML = "";
     for (var _i = 0, comments_1 = comments; _i < comments_1.length; _i++) {
         var comment = comments_1[_i];
-        repliesBody.innerHTML += "\n        <div class=\"reply post\">\n            <div class=\"postData row\">\n                <div class=\"col-9 postAuthor\">\n                    <img src=\"/imgs/user_avatars/conker.jpg\" class=\"mini-avatar\" alt=\"avatar image\" />\n                    <span><strong>".concat(comment.username, "</strong> says:</span>\n                </div>\n                <div class=\"col postDate\">\n                    <p>").concat(comment.createdAt, "</p>\n                </div>\n            </div>\n            <div class=\"postContent\">\n                <p>").concat(comment.content, "</p>\n            </div>\n            <div class=\"votesContainer\">\n                <button type=\"button\" class=\"upvoteBtn\" id=\"thread-upvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-up-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"upvoteCount\">15</span>\n                <button type=\"button\" class=\"downvoteBtn\" id=\"thread-downvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-down-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"downvoteCount\">-2</span>   \n            </div>\n        </div>\n        ");
+        repliesBody.innerHTML += "\n        <div class=\"reply post\">\n            <div class=\"postData row\">\n                <div class=\"col-9 postAuthor\">\n                    <img src=\"/imgs/user_avatars/conker.jpg\" class=\"mini-avatar\" alt=\"avatar image\" />\n                    <span><strong>".concat(comment.username, "</strong> says:</span>\n                </div>\n                <div class=\"col postDate\">\n                    <p>").concat(new Date(comment.createdAt), "</p>\n                </div>\n            </div>\n            <div class=\"postContent\">\n                <p>").concat(comment.content, "</p>\n            </div>\n            <div class=\"votesContainer\">\n                <button type=\"button\" class=\"upvoteBtn\" id=\"thread-upvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-up-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"upvoteCount\" id=\"comment-upvote-").concat(comment.commentId, "\">15</span>\n                <button type=\"button\" class=\"downvoteBtn\" id=\"thread-downvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-down-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"downvoteCount\" id=\"comment-downvote-").concat(comment.commentId, "\">-2</span>   \n            </div>\n        </div>\n        ");
     }
 }
 document.addEventListener("DOMContentLoaded", function () {
@@ -82,7 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             return [4 /*yield*/, getCommentsFromThread(Number(threadId))];
                         case 1:
                             comments = _a.sent();
-                            console.log(comments);
                             addCommentsOnThread(comments, threadId);
                             targetModal.classList.add('show');
                             targetModal.setAttribute('aria-hidden', 'false');
@@ -94,13 +94,54 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+function addComment(target, modalId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var replyInput, response, comments;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    replyInput = document.getElementById("replyContent-".concat(modalId));
+                    if (replyInput.value.length <= 5) {
+                        alert("your reply can't be shorter than 5 characters");
+                        return [2 /*return*/];
+                    }
+                    return [4 /*yield*/, fetch("/NewReply", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                ThreadId: modalId,
+                                Content: replyInput.value
+                            })
+                        })];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) return [3 /*break*/, 3];
+                    console.log("reply posted");
+                    return [4 /*yield*/, getCommentsFromThread(Number(modalId))];
+                case 2:
+                    comments = _a.sent();
+                    addCommentsOnThread(comments, modalId);
+                    return [3 /*break*/, 4];
+                case 3:
+                    console.log("something went wrong");
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
 document.addEventListener("click", function (e) {
     var _a, _b;
     var target = e.target;
     var modalId = target.getAttribute("id");
     if (target.classList.contains("upvoteBtn") || target.classList.contains("downvoteBtn")) {
         addVote(target);
-        //console.log(target);
+        return;
+    }
+    if (target.classList.contains("replyBtn")) {
+        addComment(target, modalId.split("-")[1]);
         return;
     }
     if (!target.classList.contains("modal") && !target.classList.contains("modalClose"))
@@ -152,7 +193,6 @@ function addVote(target) {
                     else {
                         return [2 /*return*/];
                     }
-                    console.log(payload);
                     return [4 /*yield*/, fetch("/NewVote", {
                             method: "POST",
                             headers: {
@@ -178,7 +218,6 @@ var modalNewContent = document.getElementById("createNewContent");
 var formsNewContent = document.getElementById("formsReviews") ||
     document.getElementById("formsThreads");
 postNewBtn.addEventListener("click", function () {
-    console.log("here");
     modalNewContent.classList.add("show");
     modalNewContent.setAttribute('aria-hidden', 'false');
 });

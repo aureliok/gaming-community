@@ -84,7 +84,16 @@
                     </div>
 
                     <div class="replies" id="replies-@thread.ThreadId">
+                    </div>
 
+                    <div class="replyToThread" id="reply-@thread.ThreadId">
+                        <forms class="formsReply" id="forms-@thread.ThreadId">
+                            <label for="replyContent-@thread.ThreadId">Reply</label>
+                            <textarea class="form-control replyInput" rows="3" id="replyContent-@thread.ThreadId"></textarea>
+                            <div class="replyInputContainer">
+                                <button type="click" class="replyBtn" id="replyBtn-@thread.ThreadId">Post Reply</button>
+                            </div>
+                        </forms>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -100,6 +100,7 @@ namespace GamingCommunity.Controllers.Community
             {
                 List<CommentWithUsernameViewModel> comments = _context.Comments
                     .Where(x => x.ThreadId == threadId)
+                    .OrderBy(x => x.CreatedAt)
                     .Join(
                         _context.Users,
                         comment => comment.UserId,
@@ -109,7 +110,7 @@ namespace GamingCommunity.Controllers.Community
                             CommentId = comment.CommentId,
                             Content = comment.Content,
                             UserId = comment.UserId,
-                            CreatedAt = comment.CreatedAt,
+                            CreatedAt = comment.CreatedAt.ToString("M/d/yyyy h:mm:ss tt"),
                             Username = user.Username
                         })
                     .ToList();
@@ -202,6 +203,26 @@ namespace GamingCommunity.Controllers.Community
             try
             {
                 await _newContentService.AddNewThread(newGamingThreadViewModel, userId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("NewReply")]
+        public async Task<IActionResult> AddNewReply([FromBody] NewReplyModel newReplyModel)
+        {
+            if (newReplyModel == null || newReplyModel.Content.Length <= 5) return BadRequest();
+
+            int userId = GetUserFromClaim();
+
+            try
+            {
+                _newContentService.AddNewReply(newReplyModel, userId);
                 return Ok();
             }
             catch (Exception ex)

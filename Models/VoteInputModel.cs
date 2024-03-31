@@ -5,5 +5,6 @@
         public string VoteType { get; set; }
         public int ThreadId { get; set; }
         public int CommentId { get; set; }
+        public int ReviewId { get; set; }
     }
 }

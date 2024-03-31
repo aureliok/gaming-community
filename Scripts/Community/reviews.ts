@@ -25,10 +25,12 @@ async function getCommentsFromThread(threadId: Number): Promise<Comment[]> {
 
 function addCommentsOnThread(comments: Comment[], threadId: string): void {
     const repliesBody = <HTMLDivElement>document.getElementById(`replies-${threadId}`);
-    console.log(repliesBody);
+    if (!repliesBody) return;
+
     repliesBody.innerHTML = "";
 
     for (const comment of comments) {
+        
         repliesBody.innerHTML += `
         <div class="reply post">
             <div class="postData row">
@@ -37,7 +39,7 @@ function addCommentsOnThread(comments: Comment[], threadId: string): void {
                     <span><strong>${comment.username}</strong> says:</span>
                 </div>
                 <div class="col postDate">
-                    <p>${comment.createdAt}</p>
+                    <p>${new Date(comment.createdAt)}</p>
                 </div>
             </div>
             <div class="postContent">
@@ -47,11 +49,11 @@ function addCommentsOnThread(comments: Comment[], threadId: string): void {
                 <button type="button" class="upvoteBtn" id="thread-upvote-${comment.commentId}">
                     <i class="bi bi-arrow-up-circle upvoteBtn"></i>
                 </button>
-                <span class="upvoteCount">15</span>
+                <span class="upvoteCount" id="comment-upvote-${comment.commentId}">15</span>
                 <button type="button" class="downvoteBtn" id="thread-downvote-${comment.commentId}">
                     <i class="bi bi-arrow-down-circle upvoteBtn"></i>
                 </button>
-                <span class="downvoteCount">-2</span>   
+                <span class="downvoteCount" id="comment-downvote-${comment.commentId}">-2</span>   
             </div>
         </div>
         `;
@@ -73,7 +75,6 @@ document.addEventListener("DOMContentLoaded", function (): void {
                 if (targetModal) {
                     const threadId: string = targetModalId.split("-")[1];
                     const comments: Comment[] = await getCommentsFromThread(Number(threadId));
-                    console.log(comments);
                     addCommentsOnThread(comments, threadId);
                     targetModal.classList.add('show');
                     targetModal.setAttribute('aria-hidden', 'false');
@@ -84,6 +85,35 @@ document.addEventListener("DOMContentLoaded", function (): void {
     });
 });
 
+async function addComment(target: HTMLElement, modalId: string): Promise<void> {
+    const replyInput = <HTMLTextAreaElement>document.getElementById(`replyContent-${modalId}`);
+
+    if (replyInput.value.length <= 5) {
+        alert("your reply can't be shorter than 5 characters");
+        return;
+    }
+
+    const response = await fetch("/NewReply", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            ThreadId: modalId,
+            Content: replyInput.value
+        })
+    });
+
+    if (response.ok) {
+        console.log("reply posted");
+        const comments: Comment[] = await getCommentsFromThread(Number(modalId));
+        addCommentsOnThread(comments, modalId);
+    } else {
+        console.log("something went wrong");
+    }
+
+}
+
 
 document.addEventListener("click", function (e): void {
     const target = <HTMLElement>e.target;
@@ -91,9 +121,14 @@ document.addEventListener("click", function (e): void {
 
     if (target.classList.contains("upvoteBtn") || target.classList.contains("downvoteBtn")) {
         addVote(target);
-        //console.log(target);
         return;
     }
+
+    if (target.classList.contains("replyBtn")) {
+        addComment(target, modalId.split("-")[1]);
+        return;
+    }
+
 
     if (!target.classList.contains("modal") && !target.classList.contains("modalClose")) return;
 
@@ -147,7 +182,6 @@ async function addVote(target: HTMLElement): Promise<void> {
         return;
     }
 
-    console.log(payload);
 
     const response = await fetch("/NewVote", {
         method: "POST",
@@ -172,7 +206,6 @@ const formsNewContent = <HTMLFormElement>document.getElementById("formsReviews")
 
 
 postNewBtn.addEventListener("click", function (): void {
-    console.log("here");
     modalNewContent.classList.add("show");
     modalNewContent.setAttribute('aria-hidden', 'false');
 });

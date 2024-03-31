@@ -93,6 +93,7 @@ namespace GamingCommunity.Entities
                 entity.Property(p => p.UserId).HasColumnName("user_id");
                 entity.Property(p => p.ThreadId).HasColumnName("thread_id");
                 entity.Property(p => p.CommentId).HasColumnName("comment_id");
+                entity.Property(p => p.ReviewId).HasColumnName("review_id");
 
                 entity.HasOne<User>()
                       .WithMany()
@@ -105,6 +106,10 @@ namespace GamingCommunity.Entities
                 entity.HasOne<Comment>()
                       .WithMany()
                       .HasForeignKey(v => v.CommentId);
+
+                entity.HasOne<GameReview>()
+                      .WithMany()
+                      .HasForeignKey(v => v.ReviewId);
             });
 
             modelBuilder.Entity<UserProfile>(entity =>

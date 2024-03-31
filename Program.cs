@@ -41,6 +41,7 @@ builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
 builder.Services.AddScoped<INewContentService, NewContentService>();
 builder.Services.AddScoped<IDeveloperRepository, DeveloperRepository>();
 builder.Services.AddScoped<IVoteRepository, VoteRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ITokenService>(sp => new TokenService(issuer, audience, secretKey));
 
 
