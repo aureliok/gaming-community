@@ -1,3 +1,12 @@
+interface InboxMessage {
+    userId: number
+    messageText: string,
+    createdAt: Date,
+    otherId: number,
+    otherUsername: string,
+    messageAuthor: string
+}
+
 import { checkPassword, checkIfPasswordEqual, checkEmailInput, checkCurrentPassword } from "../Helpers/validators.js";
 
 const username = <HTMLParagraphElement>document.getElementById("profileUsername");
@@ -48,16 +57,52 @@ function loadUserData(): void {
 }
 
 
-function displayMyActivities(): void {
-    profileWindow.innerHTML = `
-    <h5>My Activities</h5>
-    `;
-}
 
-function displayMyMessages(): void {
+async function displayMyMessages(): Promise<void> {
     profileWindow.innerHTML = `
-    <h5>My Direct Messages</h5>
+    <h5>My Inbox</h5>
     `;
+
+    var inboxMessages: InboxMessage[] = [];
+
+    const response = await fetch("/GetInboxMessages", {
+        method: "GET",
+    });
+
+    if (response.ok) {
+        const messages: InboxMessage[] = await response.json();
+        messages.forEach(message => {
+            message.createdAt = new Date(message.createdAt);
+        });
+        inboxMessages.push(...messages);
+    }
+
+    if (inboxMessages.length == 0) return;
+
+    inboxMessages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+    console.log(inboxMessages);
+
+    inboxMessages.forEach(message => { 
+        profileWindow.innerHTML += `
+        <div class="inboxMessage modal-InboxMessage inboxMessage-${message.otherId}" 
+            id="inboxMessage-${message.otherId}"
+            data-toggle="modal" data-target="#modal-inboxMessage">
+            <div class="row modal-InboxMessage inboxMessage-${message.otherId}">
+                <div class="col modal-InboxMessage inboxMessage-${message.otherId}">
+                    <p class="modal-InboxMessage inboxMessage-${message.otherId}">Chat with <strong>${message.otherUsername}</strong></p>
+                </div>
+                <div class="col-3 inboxDate modal-InboxMessage inboxMessage-${message.otherId}">
+                    <p class="modal-InboxMessage inboxMessage-${message.otherId}">${message.createdAt.toLocaleString()}</p>
+                </div>
+            </div>
+            <div class="modal-InboxMessage inboxMessage-${message.otherId}">
+                <strong>${message.messageAuthor}</strong>: ${message.messageText}
+            </div>
+        </div>
+        `;
+    })
+    
 }
 
 function displayChangePassword(): void {
@@ -190,7 +235,27 @@ function displayChangeEmail(): void {
 }
 
 
-document.addEventListener("DOMContentLoaded", loadUserData);
+document.addEventListener("DOMContentLoaded", () => {
+    loadUserData();
+    //displayMyMessages();
+});
+
+document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+
+    if (!target.classList.contains("modal-InboxMessage")) {
+        return;
+    }
+    console.log(target);
+
+    const modalDiv = <HTMLDivElement>document.getElementById("modal-inboxMessage");
+    console.log(modalDiv);
+
+    modalDiv.classList.add("show");
+    modalDiv.classList.add("modal-show");
+    modalDiv.setAttribute("aria-hidden", "false");
+
+})
 
 profileMenu.addEventListener("click", function (e: Event): void {
     const target = <HTMLElement>e.target;
@@ -198,9 +263,6 @@ profileMenu.addEventListener("click", function (e: Event): void {
     if (target.nodeName != "BUTTON") return;
 
     switch (target.id) {
-        case "myActivitiesBtn":
-            displayMyActivities();
-            return;
         case "seeDMBtn":
             displayMyMessages();
             return;

@@ -31,9 +31,6 @@
                     <p id="profilePlatformLink"><a href="https://www.google.com" target="_blank">google</a></p>
                 </div>
                 <div class="profileMenu">
-                    <div class="myActivities">
-                        <button type="button" id="myActivitiesBtn" class="button">My activities</button>
-                    </div>
                     <div class="seeDirectMessages">
                         <button type="button" id="seeDMBtn" class="button">Direct messages</button>
                     </div>
@@ -49,13 +46,33 @@
             
             <div class="profileWindowContainer col-10">
                 <div class="profileWindow">
-                    <h5>My Activities</h5>
+                    <h5>My Inbox</h5>
                 </div>
             </div>
             
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modal-inboxMessage" tabindex="-1" role="dialog" aria-labelledby="modalLabel-inboxMessage" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">e</h5>
+                    <button type="button" class="modalClose" data-dismiss="modal" aria-label="Close">
+                        <span class="modalClose">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     <script type="module" src="~/js/Profile/profile.js"></script>

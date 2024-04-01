@@ -63,7 +63,7 @@ function addCommentsOnThread(comments, threadId) {
     repliesBody.innerHTML = "";
     for (var _i = 0, comments_1 = comments; _i < comments_1.length; _i++) {
         var comment = comments_1[_i];
-        repliesBody.innerHTML += "\n        <div class=\"reply post\">\n            <div class=\"postData row\">\n                <div class=\"col-9 postAuthor\">\n                    <img src=\"/imgs/user_avatars/conker.jpg\" class=\"mini-avatar\" alt=\"avatar image\" />\n                    <span><strong>".concat(comment.username, "</strong> says:</span>\n                </div>\n                <div class=\"col postDate\">\n                    <p>").concat(new Date(comment.createdAt), "</p>\n                </div>\n            </div>\n            <div class=\"postContent\">\n                <p>").concat(comment.content, "</p>\n            </div>\n            <div class=\"votesContainer\">\n                <button type=\"button\" class=\"upvoteBtn\" id=\"btn-comment-upvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-up-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"upvoteCount\" id=\"comment-upvote-").concat(comment.commentId, "\">0</span>\n                <button type=\"button\" class=\"downvoteBtn\" id=\"btn-comment-downvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-down-circle upvoteBtn\"></i>\n                </button>\n                <span class=\"downvoteCount\" id=\"comment-downvote-").concat(comment.commentId, "\">0</span>   \n            </div>\n        </div>\n        ");
+        repliesBody.innerHTML += "\n        <div class=\"reply post\">\n            <div class=\"postData row\">\n                <div class=\"col-9 postAuthor\">\n                    <img src=\"/imgs/user_avatars/conker.jpg\" class=\"mini-avatar\" alt=\"avatar image\" />\n                    <span><strong>".concat(comment.username, "</strong> says:</span>\n                </div>\n                <div class=\"col postDate\">\n                    <p>").concat(new Date(comment.createdAt).toLocaleString(), "</p>\n                </div>\n            </div>\n            <div class=\"postContent\">\n                <p>").concat(comment.content, "</p>\n            </div>\n            <div class=\"votesContainer\">\n                <button type=\"button\" class=\"upvoteBtn\" id=\"btn-comment-upvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-up-circle i-upvoteBtn\"></i>\n                </button>\n                <span class=\"upvoteCount\" id=\"comment-upvote-").concat(comment.commentId, "\">0</span>\n                <button type=\"button\" class=\"downvoteBtn\" id=\"btn-comment-downvote-").concat(comment.commentId, "\">\n                    <i class=\"bi bi-arrow-down-circle i-downvoteBtn\"></i>\n                </button>\n                <span class=\"downvoteCount\" id=\"comment-downvote-").concat(comment.commentId, "\">0</span>   \n            </div>\n        </div>\n        ");
     }
 }
 function refreshVoteCount(tupleVote) {
@@ -188,7 +188,7 @@ document.addEventListener("click", function (e) {
     var _a, _b, _c, _d;
     var target = e.target;
     var modalId = target.getAttribute("id");
-    if (target.classList.contains("upvoteBtn") || target.classList.contains("downvoteBtn")) {
+    if (target.classList.contains("i-upvoteBtn") || target.classList.contains("i-downvoteBtn")) {
         addVote(target);
         return;
     }

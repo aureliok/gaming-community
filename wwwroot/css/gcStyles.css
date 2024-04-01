@@ -190,6 +190,22 @@
     text-decoration: underline;
 }
 
+.inboxMessage {
+    border: 1px solid var(--palette1);
+    border-radius: .3em;
+    padding: 1em;
+    margin: 1em;
+    background-color: white;
+}
+
+.inboxMessage:hover {
+    cursor: pointer;
+}
+
+.inboxDate {
+    text-align: right;
+}
+
 
 /*Reviews/Gaming.cshml*/
 .containerTable {
@@ -281,6 +297,20 @@
     align-self: flex-end;
     display: flex;
     padding-right: 2%;
+}
+
+.upvoteBtn, .downvoteBtn {
+    background-color: transparent;
+    border: none;
+    margin: 0;
+}
+
+.i-upvoteBtn, .i-downvoteBtn {
+    font-size: 1.5em;
+}
+
+.upvoteCount, .downvoteCount {
+    margin-top: .5em;
 }
 
 .replyToThread {

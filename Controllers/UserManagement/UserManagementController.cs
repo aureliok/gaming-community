@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using GamingCommunity.Entities;
 using GamingCommunity.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using GamingCommunity.Models;
 
 namespace GamingCommunity.Controllers.UserManagement
 {
@@ -12,16 +14,19 @@ namespace GamingCommunity.Controllers.UserManagement
         private readonly IUserRepository _userRepository;
         private readonly IUserProfileRepository _profileRepository;
         private readonly IAuthenticationService _authenticationService;
+        private readonly GamingCommunityDbContext _context;
 
         public UserManagementController(IUserManagementService userManagementService, 
                                         IUserRepository userRepository,
                                         IUserProfileRepository profileRepository,
-                                        IAuthenticationService authenticationService)
+                                        IAuthenticationService authenticationService,
+                                        GamingCommunityDbContext context)
         {
             _userManagementService = userManagementService;
             _userRepository = userRepository;
             _profileRepository = profileRepository;
             _authenticationService = authenticationService;
+            _context = context;
         }
 
         public int GetUserIdFromClaim()
@@ -126,6 +131,128 @@ namespace GamingCommunity.Controllers.UserManagement
             {
                 return BadRequest($"Failed to change username: {ex.Message}");
             }
+        }
+
+
+        [HttpGet]
+        [Route("UserIncomingMessages")]
+        public List<InboxMessageReturnViewModel> GetUserIncomingMessages(int userId)
+        {
+            //int userId = GetUserIdFromClaim();
+
+            //if (userIdSession != userId) 
+            //    return BadRequest("UserId doesn't match");
+
+            List<InboxMessage> ims = _context.InboxMessages
+                                                        .Where(im => im.RecipientId == userId)
+                                                        //.GroupBy(im => im.SenderId)
+                                                        //.Select(g => g.OrderByDescending(im => im.CreatedAt).FirstOrDefault())
+                                                        .ToList();
+
+            List<InboxMessageReturnViewModel> imvms = ims
+                                                .Select(g => new
+                                                {
+                                                    SenderId = g.SenderId,
+                                                    RecipientId = g.RecipientId,
+                                                    CreatedAt = g.CreatedAt,
+                                                    MessageText = g.MessageText,
+                                                    OtherId = g.SenderId == userId ? g.RecipientId : g.SenderId
+                                                })
+                                                .Join(_context.Users,
+                                                im => im.OtherId,
+                                                u => u.UserId,
+                                                (im, u) => new InboxMessageReturnViewModel
+                                                {
+                                                    UserId = userId,
+                                                    CreatedAt = im.CreatedAt,
+                                                    MessageText = im.MessageText,
+                                                    OtherId = im.OtherId,
+                                                    OtherUsername = u.Username,
+                                                    MessageAuthor = u.Username
+                                                })
+                                                .ToList();
+
+            if (imvms.Any())
+            {
+                return imvms;
+            } 
+            else
+            {
+                throw new NotSupportedException();
+            }
+
+        }
+        
+        [HttpGet]
+        [Route("UserOutgoingMessages")]
+        public List<InboxMessageReturnViewModel> GetUserOutgoingMessages(int userId)
+        {
+            //int userId = GetUserIdFromClaim();
+
+            //if (userIdSession != userId) 
+            //    return BadRequest("UserId doesn't match");
+
+            List<InboxMessage> ims = _context.InboxMessages
+                                    .Where(im => im.SenderId == userId)
+                                    //.GroupBy(im => im.RecipientId)
+                                    //.Select(g => g.OrderByDescending(im => im.CreatedAt).FirstOrDefault())
+                                    .ToList();
+
+            List<InboxMessageReturnViewModel> imvms = ims
+                                                .Select(g => new
+                                                {
+                                                    SenderId = g.SenderId,
+                                                    RecipientId = g.RecipientId,
+                                                    CreatedAt = g.CreatedAt,
+                                                    MessageText = g.MessageText,
+                                                    OtherId = g.SenderId == userId ? g.RecipientId : g.SenderId
+                                                })
+                                                .Join(_context.Users,
+                                                im => im.OtherId,
+                                                u => u.UserId,
+                                                (im, u) => new InboxMessageReturnViewModel
+                                                {
+                                                    UserId = userId,
+                                                    CreatedAt = im.CreatedAt,
+                                                    MessageText = im.MessageText,
+                                                    OtherId = im.OtherId,
+                                                    OtherUsername = u.Username,
+                                                    MessageAuthor = "You"
+                                                })
+                                                .ToList();
+
+            if (imvms.Any())
+            {
+                return imvms;
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetInboxMessages")]
+        public async Task<IActionResult> GetLastInboxMessages()
+        {
+
+            int userId = GetUserIdFromClaim();
+
+            //if (userIdSession != userId) 
+            //    return BadRequest("UserId doesn't match");
+
+            List<InboxMessageReturnViewModel> inboxIncoming = GetUserIncomingMessages(userId);
+            List<InboxMessageReturnViewModel> inboxOutgoing = GetUserOutgoingMessages(userId);
+
+            List<InboxMessageReturnViewModel?> inboxMessages = inboxIncoming
+                                                                .Concat(inboxOutgoing)
+                                                                .GroupBy(im => im.OtherId)
+                                                                .Select(im => im.OrderByDescending(m => m.CreatedAt).FirstOrDefault())
+                                                                .ToList();
+
+            
+            return Ok(inboxMessages);
         }
  
     }

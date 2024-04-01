@@ -74,11 +74,40 @@ function loadUserData() {
         console.log(error);
     });
 }
-function displayMyActivities() {
-    profileWindow.innerHTML = "\n    <h5>My Activities</h5>\n    ";
-}
 function displayMyMessages() {
-    profileWindow.innerHTML = "\n    <h5>My Direct Messages</h5>\n    ";
+    return __awaiter(this, void 0, void 0, function () {
+        var inboxMessages, response, messages;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    profileWindow.innerHTML = "\n    <h5>My Inbox</h5>\n    ";
+                    inboxMessages = [];
+                    return [4 /*yield*/, fetch("/GetInboxMessages", {
+                            method: "GET",
+                        })];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) return [3 /*break*/, 3];
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    messages = _a.sent();
+                    messages.forEach(function (message) {
+                        message.createdAt = new Date(message.createdAt);
+                    });
+                    inboxMessages.push.apply(inboxMessages, messages);
+                    _a.label = 3;
+                case 3:
+                    if (inboxMessages.length == 0)
+                        return [2 /*return*/];
+                    inboxMessages.sort(function (a, b) { return b.createdAt.getTime() - a.createdAt.getTime(); });
+                    console.log(inboxMessages);
+                    inboxMessages.forEach(function (message) {
+                        profileWindow.innerHTML += "\n        <div class=\"inboxMessage modal-InboxMessage inboxMessage-".concat(message.otherId, "\" \n            id=\"inboxMessage-").concat(message.otherId, "\"\n            data-toggle=\"modal\" data-target=\"#modal-inboxMessage\">\n            <div class=\"row modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                <div class=\"col modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                    <p class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">Chat with <strong>").concat(message.otherUsername, "</strong></p>\n                </div>\n                <div class=\"col-3 inboxDate modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                    <p class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">").concat(message.createdAt.toLocaleString(), "</p>\n                </div>\n            </div>\n            <div class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                <strong>").concat(message.messageAuthor, "</strong>: ").concat(message.messageText, "\n            </div>\n        </div>\n        ");
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
 }
 function displayChangePassword() {
     var _this = this;
@@ -214,15 +243,27 @@ function displayChangeEmail() {
         });
     }); });
 }
-document.addEventListener("DOMContentLoaded", loadUserData);
+document.addEventListener("DOMContentLoaded", function () {
+    loadUserData();
+    //displayMyMessages();
+});
+document.addEventListener("click", function (e) {
+    var target = e.target;
+    if (!target.classList.contains("modal-InboxMessage")) {
+        return;
+    }
+    console.log(target);
+    var modalDiv = document.getElementById("modal-inboxMessage");
+    console.log(modalDiv);
+    modalDiv.classList.add("show");
+    modalDiv.classList.add("modal-show");
+    modalDiv.setAttribute("aria-hidden", "false");
+});
 profileMenu.addEventListener("click", function (e) {
     var target = e.target;
     if (target.nodeName != "BUTTON")
         return;
     switch (target.id) {
-        case "myActivitiesBtn":
-            displayMyActivities();
-            return;
         case "seeDMBtn":
             displayMyMessages();
             return;

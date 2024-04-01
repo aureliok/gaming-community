@@ -360,6 +360,8 @@ namespace GamingCommunity.Controllers.Community
 
             int userId = GetUserFromClaim();
 
+            //TODO : check if the vote is on the users own thread/comment/review
+
             try
             {
                 await _newContentService.AddNewVote(voteInputModel, userId);

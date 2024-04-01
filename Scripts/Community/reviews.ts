@@ -44,7 +44,7 @@ function addCommentsOnThread(comments: Comment[], threadId: string): void {
                     <span><strong>${comment.username}</strong> says:</span>
                 </div>
                 <div class="col postDate">
-                    <p>${new Date(comment.createdAt)}</p>
+                    <p>${new Date(comment.createdAt).toLocaleString()}</p>
                 </div>
             </div>
             <div class="postContent">
@@ -52,11 +52,11 @@ function addCommentsOnThread(comments: Comment[], threadId: string): void {
             </div>
             <div class="votesContainer">
                 <button type="button" class="upvoteBtn" id="btn-comment-upvote-${comment.commentId}">
-                    <i class="bi bi-arrow-up-circle upvoteBtn"></i>
+                    <i class="bi bi-arrow-up-circle i-upvoteBtn"></i>
                 </button>
                 <span class="upvoteCount" id="comment-upvote-${comment.commentId}">0</span>
                 <button type="button" class="downvoteBtn" id="btn-comment-downvote-${comment.commentId}">
-                    <i class="bi bi-arrow-down-circle upvoteBtn"></i>
+                    <i class="bi bi-arrow-down-circle i-downvoteBtn"></i>
                 </button>
                 <span class="downvoteCount" id="comment-downvote-${comment.commentId}">0</span>   
             </div>
@@ -171,7 +171,7 @@ document.addEventListener("click", function (e): void {
     const target = <HTMLElement>e.target;
     const modalId = <string>target.getAttribute("id");
 
-    if (target.classList.contains("upvoteBtn") || target.classList.contains("downvoteBtn")) {
+    if (target.classList.contains("i-upvoteBtn") || target.classList.contains("i-downvoteBtn")) {
         addVote(target);
         return;
     }
