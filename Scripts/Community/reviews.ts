@@ -41,7 +41,7 @@ function addCommentsOnThread(comments: Comment[], threadId: string): void {
             <div class="postData row">
                 <div class="col-9 postAuthor">
                     <img src="/imgs/user_avatars/conker.jpg" class="mini-avatar" alt="avatar image" />
-                    <span><strong>${comment.username}</strong> says:</span>
+                        <strong><span class="userlink user-${comment.userId}">${comment.username}</span></strong> says:
                 </div>
                 <div class="col postDate">
                     <p>${new Date(comment.createdAt).toLocaleString()}</p>
@@ -190,6 +190,7 @@ document.addEventListener("click", function (e): void {
     if (target === modal && !target.classList.contains("modalClose")) {
         modal.classList.remove("show");
         modal.classList.remove("modal-show");
+        modal.setAttribute("aria-hidden", "true");
         return;
     }
 

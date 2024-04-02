@@ -57,7 +57,6 @@ function loadUserData(): void {
 }
 
 
-
 async function displayMyMessages(): Promise<void> {
     profileWindow.innerHTML = `
     <h5>My Inbox</h5>
@@ -65,7 +64,7 @@ async function displayMyMessages(): Promise<void> {
 
     var inboxMessages: InboxMessage[] = [];
 
-    const response = await fetch("/GetInboxMessages", {
+    const response = await fetch("/GetLastInboxMessages", {
         method: "GET",
     });
 
@@ -81,8 +80,6 @@ async function displayMyMessages(): Promise<void> {
 
     inboxMessages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
-    console.log(inboxMessages);
-
     inboxMessages.forEach(message => { 
         profileWindow.innerHTML += `
         <div class="inboxMessage modal-InboxMessage inboxMessage-${message.otherId}" 
@@ -90,7 +87,10 @@ async function displayMyMessages(): Promise<void> {
             data-toggle="modal" data-target="#modal-inboxMessage">
             <div class="row modal-InboxMessage inboxMessage-${message.otherId}">
                 <div class="col modal-InboxMessage inboxMessage-${message.otherId}">
-                    <p class="modal-InboxMessage inboxMessage-${message.otherId}">Chat with <strong>${message.otherUsername}</strong></p>
+                    <p class="modal-InboxMessage inboxMessage-${message.otherId}">
+                    Chat with <strong><span class="modal-InboxMessage userlink user-${message.otherId} inboxMessage-${message.otherId}">
+                    ${message.otherUsername}</span></strong>
+                    </p>
                 </div>
                 <div class="col-3 inboxDate modal-InboxMessage inboxMessage-${message.otherId}">
                     <p class="modal-InboxMessage inboxMessage-${message.otherId}">${message.createdAt.toLocaleString()}</p>
@@ -237,24 +237,124 @@ function displayChangeEmail(): void {
 
 document.addEventListener("DOMContentLoaded", () => {
     loadUserData();
-    //displayMyMessages();
+    displayMyMessages();
 });
+
+
+async function loadConversationChat(otherUserId: string): Promise<void> {
+
+    const response = await fetch(`/GetInboxMessages?otherUserId=${otherUserId}`, {
+        method: "GET"
+    });
+
+    const chatTitle = <HTMLHeadingElement>document.querySelector(".modal-title");
+    const chatBody = <HTMLDivElement>document.querySelector(".modal-body");
+    chatBody.innerHTML = "";
+
+    if (response.ok) {
+        const inboxMessages = await response.json();
+
+        chatTitle.innerHTML = `<span class="modalDisplay userlink user-${inboxMessages[0].otherId}">
+                                Chat with ${inboxMessages[0].otherUsername}</span>`;
+
+        for (var i = 0; i < inboxMessages.length; i++) {
+            chatBody.innerHTML += `
+            <div class="chatMessage modalDisplay">
+                <div class="row modalDisplay">
+                    <div class="messageAuthor modalDisplay col">
+                        <strong class="modalDisplay">${inboxMessages[i].messageAuthor}</strong>:
+                    </div>
+                    <div class="messageDate modalDisplay col-3">
+                        ${new Date(inboxMessages[i].createdAt).toLocaleString()}
+                    </div>
+                    <div class="messageContent modalDisplay">
+                        ${inboxMessages[i].messageText}
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        chatBody.innerHTML += `
+                <div class="messageReply modalDisplay">
+                    <textarea class="messageAreaInput modalDisplay" placeholder="Write your message"></textarea>
+                    <div class="buttonChatContainer modalDisplay">
+                        <button type="click" class="chatSendBtn modalDisplay" id="sendTo-${inboxMessages[0].otherId}">Send</button>
+                    </div>
+                </div>
+                `;
+
+    } else {
+        alert("Something went wrong when fetching chat history");
+    }
+}
+
+
+async function SendPrivateMessage(target: HTMLButtonElement): Promise<void> {
+    const messageInput = <HTMLTextAreaElement>document.querySelector(".messageAreaInput");
+    const otherId = <string>target.getAttribute("id")?.split("-")[1];
+
+    if (messageInput.value.length < 5) {
+        alert("Your message can't have less than 5 characters");
+        return;
+    }
+
+    const sendMessage = {
+        OtherId: otherId,
+        Content: messageInput.value
+    } 
+
+    const response = await fetch("/SendPrivateMessage", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(sendMessage)
+    });
+
+    if (response.ok) {
+        loadConversationChat(otherId);
+    } else {
+        alert("Something went wrong");
+    }
+}
+
 
 document.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
+    const modalDiv = <HTMLDivElement>document.getElementById("modal-inboxMessage");
+    const regexModalId = /inboxMessage-(\d+)/;
 
-    if (!target.classList.contains("modal-InboxMessage")) {
+
+    if (!modalDiv.classList.contains("show") && target.classList.contains("modal-InboxMessage")) {
+        const otherUserId = target.classList.value.match(regexModalId)?.[1];
+        if (otherUserId) {
+            console.log(otherUserId);
+            loadConversationChat(otherUserId);
+
+            modalDiv.classList.add("show");
+            modalDiv.classList.add("modal-show");
+            modalDiv.setAttribute("aria-hidden", "false");
+
+            return;
+        } else {
+            alert("Couldn't load chat");
+            return;
+        }
+    }
+
+    if (target.classList.contains("chatSendBtn")) {
+        SendPrivateMessage(target as HTMLButtonElement);
+    }
+
+    if (target.classList.contains("modalClose") || !target.classList.contains("modalDisplay")) {
+        modalDiv.classList.remove("show");
+        modalDiv.classList.remove("modal-show");
+        modalDiv.setAttribute("aria-hidden", "true");
+        displayMyMessages();
+
         return;
     }
-    console.log(target);
-
-    const modalDiv = <HTMLDivElement>document.getElementById("modal-inboxMessage");
-    console.log(modalDiv);
-
-    modalDiv.classList.add("show");
-    modalDiv.classList.add("modal-show");
-    modalDiv.setAttribute("aria-hidden", "false");
-
 })
 
 profileMenu.addEventListener("click", function (e: Event): void {

@@ -14,6 +14,7 @@ namespace GamingCommunity.Services.Implementations
         private readonly IGamingThreadRepository _gameThreadRepository;
         private readonly IVoteRepository _voteRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly IInboxMessageRepository _inboxMessageRepository;
         
         public NewContentService(IGameRepository gameRepository,
                           IDeveloperRepository developerRepository,
@@ -21,7 +22,8 @@ namespace GamingCommunity.Services.Implementations
                           IGameReviewRepository gameReviewRepository,
                           IGamingThreadRepository gamingThreadRepository,
                           IVoteRepository voteRepository,
-                          ICommentRepository commentRepository)
+                          ICommentRepository commentRepository,
+                          IInboxMessageRepository inboxMessageRepository)
         {
             _gameRepository = gameRepository;
             _developerRepository = developerRepository;
@@ -30,6 +32,7 @@ namespace GamingCommunity.Services.Implementations
             _gameThreadRepository = gamingThreadRepository;
             _voteRepository = voteRepository;
             _commentRepository = commentRepository;
+            _inboxMessageRepository = inboxMessageRepository;
         }
 
         public async Task AddNewReview(NewGameReviewViewModel viewModel, int userId)
@@ -95,6 +98,19 @@ namespace GamingCommunity.Services.Implementations
             };
 
             await _voteRepository.AddAsync(vote);
+        }
+
+        public async Task AddNewPrivateMessage(SendPrivateMessageModel model, int userId)
+        {
+            InboxMessage inboxMessage = new InboxMessage
+            {
+                SenderId = userId,
+                RecipientId = model.OtherId,
+                MessageText = model.Content,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _inboxMessageRepository.AddAsync(inboxMessage);
         }
     }
 }

@@ -16,5 +16,6 @@ namespace GamingCommunity.Services.Interfaces
         public Task AddNewReply(NewReplyModel viewModel, int userId);
 
         public Task AddNewVote(VoteInputModel viewModel, int userId);
+        public Task AddNewPrivateMessage(SendPrivateMessageModel viewModel, int userId);
     }
 }

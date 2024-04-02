@@ -14,18 +14,21 @@ namespace GamingCommunity.Controllers.UserManagement
         private readonly IUserRepository _userRepository;
         private readonly IUserProfileRepository _profileRepository;
         private readonly IAuthenticationService _authenticationService;
+        private readonly INewContentService _newContentService;
         private readonly GamingCommunityDbContext _context;
 
         public UserManagementController(IUserManagementService userManagementService, 
                                         IUserRepository userRepository,
                                         IUserProfileRepository profileRepository,
                                         IAuthenticationService authenticationService,
+                                        INewContentService newContentService,
                                         GamingCommunityDbContext context)
         {
             _userManagementService = userManagementService;
             _userRepository = userRepository;
             _profileRepository = profileRepository;
             _authenticationService = authenticationService;
+            _newContentService = newContentService;
             _context = context;
         }
 
@@ -138,15 +141,8 @@ namespace GamingCommunity.Controllers.UserManagement
         [Route("UserIncomingMessages")]
         public List<InboxMessageReturnViewModel> GetUserIncomingMessages(int userId)
         {
-            //int userId = GetUserIdFromClaim();
-
-            //if (userIdSession != userId) 
-            //    return BadRequest("UserId doesn't match");
-
             List<InboxMessage> ims = _context.InboxMessages
                                                         .Where(im => im.RecipientId == userId)
-                                                        //.GroupBy(im => im.SenderId)
-                                                        //.Select(g => g.OrderByDescending(im => im.CreatedAt).FirstOrDefault())
                                                         .ToList();
 
             List<InboxMessageReturnViewModel> imvms = ims
@@ -233,8 +229,8 @@ namespace GamingCommunity.Controllers.UserManagement
 
 
         [HttpGet]
-        [Route("GetInboxMessages")]
-        public async Task<IActionResult> GetLastInboxMessages()
+        [Route("GetLastInboxMessages")]
+        public IActionResult GetLastInboxMessages()
         {
 
             int userId = GetUserIdFromClaim();
@@ -253,6 +249,40 @@ namespace GamingCommunity.Controllers.UserManagement
 
             
             return Ok(inboxMessages);
+        }
+
+        [HttpGet]
+        [Route("GetInboxMessages")]
+        public IActionResult GetInboxMessages(int otherUserId)
+        {
+            int userId = GetUserIdFromClaim();
+
+            List<InboxMessageReturnViewModel> inboxIncoming = GetUserIncomingMessages(userId);
+            List<InboxMessageReturnViewModel> inboxOutgoing = GetUserOutgoingMessages(userId);
+
+            inboxIncoming = inboxIncoming.Where(m => m.OtherId == otherUserId).ToList();
+            inboxOutgoing = inboxOutgoing.Where(m => m.OtherId == otherUserId).ToList();
+
+            List<InboxMessageReturnViewModel> inboxChat = inboxIncoming
+                                                            .Concat(inboxOutgoing)
+                                                            .OrderBy(m => m.CreatedAt)
+                                                            .ToList();
+
+
+            return Ok(inboxChat);
+        }
+
+        [HttpPost]
+        [Route("SendPrivateMessage")]
+        public async Task<IActionResult> SendPrivateMessage([FromBody] SendPrivateMessageModel sendPrivateMessageModel)
+        {
+            int userId = GetUserIdFromClaim();
+
+            Console.WriteLine(sendPrivateMessageModel.OtherId);
+
+            await _newContentService.AddNewPrivateMessage(sendPrivateMessageModel, userId);
+
+            return Ok();
         }
  
     }

@@ -2,6 +2,7 @@
 const dropdownToggle = <HTMLButtonElement>document.getElementById("userDropdown");
 const dropdownMenu = <HTMLUListElement>document.querySelector(".dropdown-userMenu");
 
+
 function logoutUser(): void {
     fetch("/Logout")
         .then(response => {
@@ -28,15 +29,26 @@ function toggleMenu(): void {
 
 
 function closeMenu(e): void {
-    if (!dropdownMenu) {
-        return;
-    }
     if (!dropdownToggle.contains(e.target as Node) && !dropdownMenu.contains(e.target as Node)) {
         dropdownMenu.classList.remove("show");
     }
 };
 
+
+function linkToUserProfile(userId: string): void {
+    window.location.href = `/Community/UserProfile?userId=${userId}`;
+}
+
  
 logoutBtn?.addEventListener("click", logoutUser);
 dropdownToggle?.addEventListener("click", toggleMenu);
-document.addEventListener("click", (e) => closeMenu(e));
+document.addEventListener("click", (e) => {
+    if (dropdownMenu) closeMenu(e);
+
+    const target = <HTMLElement>e.target;
+    if (target.classList.contains("userlink")) {
+        const userId: string = target.classList[1].split("-")[1];
+        console.log(userId);
+        linkToUserProfile(userId);
+    }
+});

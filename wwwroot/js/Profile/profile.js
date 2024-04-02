@@ -82,7 +82,7 @@ function displayMyMessages() {
                 case 0:
                     profileWindow.innerHTML = "\n    <h5>My Inbox</h5>\n    ";
                     inboxMessages = [];
-                    return [4 /*yield*/, fetch("/GetInboxMessages", {
+                    return [4 /*yield*/, fetch("/GetLastInboxMessages", {
                             method: "GET",
                         })];
                 case 1:
@@ -100,9 +100,8 @@ function displayMyMessages() {
                     if (inboxMessages.length == 0)
                         return [2 /*return*/];
                     inboxMessages.sort(function (a, b) { return b.createdAt.getTime() - a.createdAt.getTime(); });
-                    console.log(inboxMessages);
                     inboxMessages.forEach(function (message) {
-                        profileWindow.innerHTML += "\n        <div class=\"inboxMessage modal-InboxMessage inboxMessage-".concat(message.otherId, "\" \n            id=\"inboxMessage-").concat(message.otherId, "\"\n            data-toggle=\"modal\" data-target=\"#modal-inboxMessage\">\n            <div class=\"row modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                <div class=\"col modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                    <p class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">Chat with <strong>").concat(message.otherUsername, "</strong></p>\n                </div>\n                <div class=\"col-3 inboxDate modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                    <p class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">").concat(message.createdAt.toLocaleString(), "</p>\n                </div>\n            </div>\n            <div class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                <strong>").concat(message.messageAuthor, "</strong>: ").concat(message.messageText, "\n            </div>\n        </div>\n        ");
+                        profileWindow.innerHTML += "\n        <div class=\"inboxMessage modal-InboxMessage inboxMessage-".concat(message.otherId, "\" \n            id=\"inboxMessage-").concat(message.otherId, "\"\n            data-toggle=\"modal\" data-target=\"#modal-inboxMessage\">\n            <div class=\"row modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                <div class=\"col modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                    <p class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                    Chat with <strong><span class=\"modal-InboxMessage userlink user-").concat(message.otherId, " inboxMessage-").concat(message.otherId, "\">\n                    ").concat(message.otherUsername, "</span></strong>\n                    </p>\n                </div>\n                <div class=\"col-3 inboxDate modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                    <p class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">").concat(message.createdAt.toLocaleString(), "</p>\n                </div>\n            </div>\n            <div class=\"modal-InboxMessage inboxMessage-").concat(message.otherId, "\">\n                <strong>").concat(message.messageAuthor, "</strong>: ").concat(message.messageText, "\n            </div>\n        </div>\n        ");
                     });
                     return [2 /*return*/];
             }
@@ -245,19 +244,106 @@ function displayChangeEmail() {
 }
 document.addEventListener("DOMContentLoaded", function () {
     loadUserData();
-    //displayMyMessages();
+    displayMyMessages();
 });
+function loadConversationChat(otherUserId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, chatTitle, chatBody, inboxMessages, i;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch("/GetInboxMessages?otherUserId=".concat(otherUserId), {
+                        method: "GET"
+                    })];
+                case 1:
+                    response = _a.sent();
+                    chatTitle = document.querySelector(".modal-title");
+                    chatBody = document.querySelector(".modal-body");
+                    chatBody.innerHTML = "";
+                    if (!response.ok) return [3 /*break*/, 3];
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    inboxMessages = _a.sent();
+                    chatTitle.innerHTML = "<span class=\"modalDisplay userlink user-".concat(inboxMessages[0].otherId, "\">\n                                Chat with ").concat(inboxMessages[0].otherUsername, "</span>");
+                    for (i = 0; i < inboxMessages.length; i++) {
+                        chatBody.innerHTML += "\n            <div class=\"chatMessage modalDisplay\">\n                <div class=\"row modalDisplay\">\n                    <div class=\"messageAuthor modalDisplay col\">\n                        <strong class=\"modalDisplay\">".concat(inboxMessages[i].messageAuthor, "</strong>:\n                    </div>\n                    <div class=\"messageDate modalDisplay col-3\">\n                        ").concat(new Date(inboxMessages[i].createdAt).toLocaleString(), "\n                    </div>\n                    <div class=\"messageContent modalDisplay\">\n                        ").concat(inboxMessages[i].messageText, "\n                    </div>\n                </div>\n            </div>\n            ");
+                    }
+                    chatBody.innerHTML += "\n                <div class=\"messageReply modalDisplay\">\n                    <textarea class=\"messageAreaInput modalDisplay\" placeholder=\"Write your message\"></textarea>\n                    <div class=\"buttonChatContainer modalDisplay\">\n                        <button type=\"click\" class=\"chatSendBtn modalDisplay\" id=\"sendTo-".concat(inboxMessages[0].otherId, "\">Send</button>\n                    </div>\n                </div>\n                ");
+                    return [3 /*break*/, 4];
+                case 3:
+                    alert("Something went wrong when fetching chat history");
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+function SendPrivateMessage(target) {
+    return __awaiter(this, void 0, void 0, function () {
+        var messageInput, otherId, sendMessage, response;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    messageInput = document.querySelector(".messageAreaInput");
+                    otherId = (_a = target.getAttribute("id")) === null || _a === void 0 ? void 0 : _a.split("-")[1];
+                    if (messageInput.value.length < 5) {
+                        alert("Your message can't have less than 5 characters");
+                        return [2 /*return*/];
+                    }
+                    sendMessage = {
+                        OtherId: otherId,
+                        Content: messageInput.value
+                    };
+                    return [4 /*yield*/, fetch("/SendPrivateMessage", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(sendMessage)
+                        })];
+                case 1:
+                    response = _b.sent();
+                    if (response.ok) {
+                        loadConversationChat(otherId);
+                    }
+                    else {
+                        alert("Something went wrong");
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
 document.addEventListener("click", function (e) {
+    var _a;
     var target = e.target;
-    if (!target.classList.contains("modal-InboxMessage")) {
+    var modalDiv = document.getElementById("modal-inboxMessage");
+    var regexModalId = /inboxMessage-(\d+)/;
+    if (!modalDiv.classList.contains("show") && target.classList.contains("modal-InboxMessage")) {
+        var otherUserId = (_a = target.classList.value.match(regexModalId)) === null || _a === void 0 ? void 0 : _a[1];
+        if (otherUserId) {
+            console.log(otherUserId);
+            loadConversationChat(otherUserId);
+            modalDiv.classList.add("show");
+            modalDiv.classList.add("modal-show");
+            modalDiv.setAttribute("aria-hidden", "false");
+            return;
+        }
+        else {
+            alert("Couldn't load chat");
+            return;
+        }
+    }
+    if (target.classList.contains("chatSendBtn")) {
+        SendPrivateMessage(target);
+    }
+    if (target.classList.contains("modalClose") || !target.classList.contains("modalDisplay")) {
+        modalDiv.classList.remove("show");
+        modalDiv.classList.remove("modal-show");
+        modalDiv.setAttribute("aria-hidden", "true");
+        displayMyMessages();
         return;
     }
-    console.log(target);
-    var modalDiv = document.getElementById("modal-inboxMessage");
-    console.log(modalDiv);
-    modalDiv.classList.add("show");
-    modalDiv.classList.add("modal-show");
-    modalDiv.setAttribute("aria-hidden", "false");
 });
 profileMenu.addEventListener("click", function (e) {
     var target = e.target;

@@ -28,15 +28,24 @@ function toggleMenu() {
 }
 ;
 function closeMenu(e) {
-    if (!dropdownMenu) {
-        return;
-    }
     if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
         dropdownMenu.classList.remove("show");
     }
 }
 ;
+function linkToUserProfile(userId) {
+    window.location.href = "/Community/UserProfile?userId=".concat(userId);
+}
 logoutBtn === null || logoutBtn === void 0 ? void 0 : logoutBtn.addEventListener("click", logoutUser);
 dropdownToggle === null || dropdownToggle === void 0 ? void 0 : dropdownToggle.addEventListener("click", toggleMenu);
-document.addEventListener("click", function (e) { return closeMenu(e); });
+document.addEventListener("click", function (e) {
+    if (dropdownMenu)
+        closeMenu(e);
+    var target = e.target;
+    if (target.classList.contains("userlink")) {
+        var userId = target.classList[1].split("-")[1];
+        console.log(userId);
+        linkToUserProfile(userId);
+    }
+});
 //# sourceMappingURL=_layout.js.map
