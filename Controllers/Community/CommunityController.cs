@@ -33,7 +33,7 @@ namespace GamingCommunity.Controllers.Community
 
         public IActionResult YourProfile()
         {
-            return View();
+            return View("YourProfile");
         }
 
         [HttpGet]
@@ -76,7 +76,8 @@ namespace GamingCommunity.Controllers.Community
                         combined.GThread.Title,
                         combined.GThread.Content,
                         combined.GThread.CreatedAt,
-                        combined.GUser.Username
+                        combined.GUser.Username,
+                        combined.GUser.UserId
                     })
                 .Select(group => new GamingThreadViewModel
                 {
@@ -85,6 +86,7 @@ namespace GamingCommunity.Controllers.Community
                     Content = group.Key.Content,
                     CreatedAt = group.Key.CreatedAt,
                     Username = group.Key.Username,
+                    UserId = group.Key.UserId,
                     CommentsCount = group.Count(x => x.Comment != null)
                 })
                 .OrderByDescending(x => x.CreatedAt)
@@ -371,6 +373,35 @@ namespace GamingCommunity.Controllers.Community
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        public IActionResult UserProfile(int userId)
+        {
+            int viewerId = GetUserFromClaim();
+
+            if (viewerId == userId)
+            {
+                return YourProfile();
+            }
+
+            UserProfileViewModel? userProfileViewModel = _context.UserProfiles
+                                                            .Where(up => up.UserId == userId)
+                                                            .Join(_context.Users,
+                                                                up => up.UserId,
+                                                                u => u.UserId,
+                                                                (up, u) => new UserProfileViewModel
+                                                                {
+                                                                    UserId = up.UserId,
+                                                                    Username = u.Username,
+                                                                    Gender = up.Gender,
+                                                                    Bio = up.Bio,
+                                                                    GamingPlatformLink = up.GamingPlatformLink
+                                                                })
+                                                            .FirstOrDefault();
+
+            if (userProfileViewModel == null) return NotFound();
+
+            return View(userProfileViewModel);
         }
     }
 }

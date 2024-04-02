@@ -119,3 +119,23 @@ body {
     color: var(--palette5) !important;
     border-radius: 10px;
 }
+
+.userlink:hover {
+    color: royalblue;
+    cursor: pointer;
+}
+
+.sendMessage {
+    display: flex;
+    padding: 1%;
+    flex-direction: column;
+}
+
+.messageAreaInput {
+    border-radius: .3em;
+}
+
+.chatSendBtn {
+    width: 20%;
+    border-radius: .2em;
+}

@@ -1,0 +1,56 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model GamingCommunity.Models.UserProfileViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container">
+    <div class="profileContainer">
+        <div class="profileAvatarBio row">
+            <div class="col-auto">
+                <img src="~/imgs/user_avatars/conker.jpg" alt="your avatar" class="profileAvatar" id="profileAvatar" />
+            </div>
+            <div class="col">
+                <div class="profileBio">
+                    <p id="profileBioText">@Model.Bio</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <div class="profileInfo">
+                    <p id="profileUsername"><strong>@Model.Username</strong></p>
+                    <p id="profileGender"><strong>@Model.Gender</strong></p>
+                    <p id="profileAge"><strong>@Model.Age</strong></p>
+                </div>
+
+                <div class="profilePlatform">
+                    <p id="profilePlatformLink"><a href="https://www.google.com" target="_blank">google</a></p>
+                </div>
+            </div>
+
+
+            <div class="profileWindowContainer col-10">
+                <div class="profileWindow">
+                    <h5>Message me!</h5>
+                    <div class="sendMessage">
+                        <textarea class="messageAreaInput" placeholder="Let's chat!"></textarea>
+                        <div class="buttonChatContainer">
+                            <button type="click" class="chatSendBtn" id="sendTo-@Model.UserId">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/Community/userProfile.js"></script>
+}
