@@ -42,6 +42,10 @@ var bio = document.getElementById("profileBioText");
 var platformLink = document.getElementById("profilePlatformLink");
 var profileMenu = document.querySelector(".profileMenu");
 var profileWindow = document.querySelector(".profileWindow");
+document.addEventListener("DOMContentLoaded", function () {
+    loadUserData();
+    displayMyMessages();
+});
 function calculateAge(dateOfBirthStr) {
     var today = new Date();
     var dob = new Date(dateOfBirthStr);
@@ -110,6 +114,7 @@ function displayMyMessages() {
 }
 function displayChangePassword() {
     var _this = this;
+    console.log("changethis");
     profileWindow.innerHTML = "\n    <h5>Change Password</h5>\n    <form id=\"passwordForm\" class=\"forms\">\n        <div>\n            <label for=\"password\">Current Password</label>\n            <input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\" required />\n            <span id=\"correctPassword\"></span>\n        </div>\n        <div>\n            <label for=\"newPassword\">New Password</label>\n            <input type=\"password\" class=\"form-control\" id=\"newPassword\" name=\"newPassword\" required />\n            <span id=\"validNewPassword\"></span>\n        </div>\n        <div>\n            <label for=\"confirmPassword\">Confirm your new password</label>\n            <input type=\"password\" class=\"form-control\" id=\"confirmPassword\" name=\"confirmPassword\" required />\n            <span id=\"confirmPasswordEqual\"></span>\n        </div>\n        <button type=\"submit\" class=\"submitBtn\" id=\"changePasswordBtn\">Change Password</button>\n    </form>\n    ";
     var curPasswordInput = document.getElementById("password");
     var newPasswordInput = document.getElementById("newPassword");
@@ -242,10 +247,6 @@ function displayChangeEmail() {
         });
     }); });
 }
-document.addEventListener("DOMContentLoaded", function () {
-    loadUserData();
-    displayMyMessages();
-});
 function loadConversationChat(otherUserId) {
     return __awaiter(this, void 0, void 0, function () {
         var response, chatTitle, chatBody, inboxMessages, i;
@@ -338,10 +339,12 @@ document.addEventListener("click", function (e) {
         SendPrivateMessage(target);
     }
     if (target.classList.contains("modalClose") || !target.classList.contains("modalDisplay")) {
-        modalDiv.classList.remove("show");
-        modalDiv.classList.remove("modal-show");
-        modalDiv.setAttribute("aria-hidden", "true");
-        displayMyMessages();
+        if (modalDiv.classList.contains("show")) {
+            modalDiv.classList.remove("show");
+            modalDiv.classList.remove("modal-show");
+            modalDiv.setAttribute("aria-hidden", "true");
+            displayMyMessages();
+        }
         return;
     }
 });
@@ -351,9 +354,11 @@ profileMenu.addEventListener("click", function (e) {
         return;
     switch (target.id) {
         case "seeDMBtn":
+            console.log("here");
             displayMyMessages();
             return;
         case "changePasswordBtn":
+            console.log("password");
             displayChangePassword();
             return;
         case "changeEmailBtn":

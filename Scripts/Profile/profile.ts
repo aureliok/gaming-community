@@ -18,6 +18,12 @@ const profileMenu = <HTMLDivElement>document.querySelector(".profileMenu");
 const profileWindow = <HTMLDivElement>document.querySelector(".profileWindow");
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    loadUserData();
+    displayMyMessages();
+});
+
+
 function calculateAge(dateOfBirthStr: string): number {
     const today = new Date();
     const dob = new Date(dateOfBirthStr);
@@ -106,6 +112,7 @@ async function displayMyMessages(): Promise<void> {
 }
 
 function displayChangePassword(): void {
+    console.log("changethis");
     profileWindow.innerHTML = `
     <h5>Change Password</h5>
     <form id="passwordForm" class="forms">
@@ -127,6 +134,7 @@ function displayChangePassword(): void {
         <button type="submit" class="submitBtn" id="changePasswordBtn">Change Password</button>
     </form>
     `;
+
 
     const curPasswordInput = <HTMLInputElement>document.getElementById("password");
     const newPasswordInput = <HTMLInputElement>document.getElementById("newPassword");
@@ -150,6 +158,7 @@ function displayChangePassword(): void {
     confirmPasswordInput.addEventListener("input", async () => {
         equalPassword = await checkIfPasswordEqual(newPasswordInput, confirmPasswordInput, passwordEquality);
     });
+
     passwordForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!curValidPassword || !validPassword || !equalPassword) {
@@ -235,12 +244,6 @@ function displayChangeEmail(): void {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadUserData();
-    displayMyMessages();
-});
-
-
 async function loadConversationChat(otherUserId: string): Promise<void> {
 
     const response = await fetch(`/GetInboxMessages?otherUserId=${otherUserId}`, {
@@ -299,6 +302,7 @@ async function SendPrivateMessage(target: HTMLButtonElement): Promise<void> {
         return;
     }
 
+
     const sendMessage = {
         OtherId: otherId,
         Content: messageInput.value
@@ -348,10 +352,12 @@ document.addEventListener("click", (e) => {
     }
 
     if (target.classList.contains("modalClose") || !target.classList.contains("modalDisplay")) {
-        modalDiv.classList.remove("show");
-        modalDiv.classList.remove("modal-show");
-        modalDiv.setAttribute("aria-hidden", "true");
-        displayMyMessages();
+        if (modalDiv.classList.contains("show")) {
+            modalDiv.classList.remove("show");
+            modalDiv.classList.remove("modal-show");
+            modalDiv.setAttribute("aria-hidden", "true");
+            displayMyMessages();
+        }
 
         return;
     }
@@ -364,9 +370,11 @@ profileMenu.addEventListener("click", function (e: Event): void {
 
     switch (target.id) {
         case "seeDMBtn":
+            console.log("here");
             displayMyMessages();
             return;
         case "changePasswordBtn":
+            console.log("password");
             displayChangePassword();
             return;
         case "changeEmailBtn":
